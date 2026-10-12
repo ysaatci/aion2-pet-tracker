@@ -22,15 +22,15 @@ at the original repo.
 ## Architecture
 
 ```
-AionMeter.Core (upstream: capture → reassembly → frames → PacketParser → GameEvents)
-        │  new events: NpcSpawned / NpcDespawned / PetCollectionSnapshot / PetSoulGained
-        ▼
+AionMeter.Core (upstream: capture â†’ reassembly â†’ frames â†’ PacketParser â†’ GameEvents)
+        â”‚  new events: NpcSpawned / NpcDespawned / PetCollectionSnapshot / PetSoulGained
+        â–¼
 PetTracker.Core (new, no UI)
-  ├─ PetCatalog        pet ↔ genus ↔ source NPC codes (data/pets.json)
-  ├─ PetProgressStore  souls + level per pet (snapshot from packets, deltas applied)
-  ├─ NearbyNpcTracker  spawned/despawned NPCs in view, joined to PetCatalog
-  └─ PetTrackerService composes the above into an immutable PetOverlaySnapshot
-        ▼
+  â”œâ”€ PetCatalog        pet â†” genus â†” source NPC codes (data/pets.json)
+  â”œâ”€ PetProgressStore  souls + level per pet (snapshot from packets, deltas applied)
+  â”œâ”€ NearbyNpcTracker  spawned/despawned NPCs in view, joined to PetCatalog
+  â””â”€ PetTrackerService composes the above into an immutable PetOverlaySnapshot
+        â–¼
 AionMeter.App (WPF): new PetOverlayWindow (nearby pets grouped by genus, progress bars)
 ```
 
@@ -39,7 +39,7 @@ AionMeter.App (WPF): new PetOverlayWindow (nearby pets grouped by genus, progres
 ### Step 0: fork setup *(done)*
 Clone upstream, rename the remote, write plan.md, gitignore captures.
 
-### Step 1: capture spike (decides the design)
+### Step 1: capture spike *(done, see docs/protocol-pets.md)*
 Use `aionmeter-cli live <seconds> --record` (run as admin) to record these scenes, one pcap each:
 
 | Scene | What to do in game | Packets to find |
@@ -55,20 +55,20 @@ Analysis uses `dump`, `hex`, `find`: diff opcode counts across scenes, search fo
 **Fallback if there's no snapshot packet:** the user enters a starting snapshot once, and progress is
 counted from soul-gain or kill packets.
 
-### Step 2: pet catalog data
+### Step 2: pet catalog data *(done: 207 pets, tools/build-pet-catalog.ps1)*
 `data/pets.json`: pet id, genus, EN name, source NPC codes, level thresholds (3 levels on Global,
-values read from captures or game UI, not hardcoded). Build it by joining a community mob → pet list
-(names) to `data/npcs/en.json` (NPC code → name). A small script reports unmatched names.
+values read from captures or game UI, not hardcoded). Build it by joining a community mob â†’ pet list
+(names) to `data/npcs/en.json` (NPC code â†’ name). A small script reports unmatched names.
 
-### Step 3: new events in the parser
+### Step 3: new events in the parser *(done)*
 Add `NpcSpawned`/`NpcDespawned` (code, actor id, position) and the pet events found in step 1 to
 `GameEvents.cs` and `PacketParser.cs`. Add replay tests from trimmed, anonymised byte fixtures.
 
-### Step 4: PetTracker.Core
+### Step 4: PetTracker.Core *(done; learned links are not saved yet)*
 `PetCatalog`, `PetProgressStore` (persisted to `%APPDATA%`), `NearbyNpcTracker`, `PetTrackerService`.
 Pure logic, unit tested with synthetic events.
 
-### Step 5: CLI check
+### Step 5: CLI check *(done; verified 15/75 against the game)*
 `aionmeter-cli pets <file.pcap>` prints the progress and nearby-pet list for a capture, to verify
 against the game before any UI.
 
@@ -81,6 +81,7 @@ Hide or remove the DPS-only UI the pet tool doesn't need (or keep both, decided 
 app, and build the installer.
 
 ## Open questions
-- Exact soul thresholds for Global's 3 levels.
-- Whether pet collection is account-wide/server-wide on Global (KR/TW changed this).
-- Whether a soul-gain packet exists, or whether souls must be inferred from kills (drops aren't guaranteed).
+- ~~Thresholds~~: unlock 5 (per pet in the catalog), then 25, then 75 (confirmed in game).
+- Whether pet collection is account-wide/server-wide on Global.
+- Learned NPC → pet links live in memory only: persist them next to the state file (step 6).
+- 44 catalog pets have no monster source (chests, shops, events); they never show as nearby.
