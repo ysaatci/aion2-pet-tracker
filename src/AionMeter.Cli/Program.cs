@@ -20,6 +20,7 @@ return args.FirstOrDefault() switch
     "replay" when args.Length > 1 => Replay(args[1]),
     "dump" when args.Length > 1 => Dump(args[1], args.Length > 2 ? args[2] : null),
     "find" when args.Length > 2 => Find(args[1], args[2]),
+    "pets" when args.Length > 1 => Pets(args.Skip(1).Where(a => !a.StartsWith("--")).ToArray()),
     "findhex" when args.Length > 2 => FindHex(args[1], Convert.FromHexString(args[2].Replace(" ", ""))),
     "crits" when args.Length > 1 => Crits(args[1]),
     "entities" when args.Length > 1 => Entities(args[1]),
@@ -41,6 +42,7 @@ int Usage()
         aionmeter-cli replay <file.pcap>            run a capture through the meter, print fights
         aionmeter-cli dump <file.pcap> [opcode]     print decoded packets (opcode as hex, e.g. 0438)
         aionmeter-cli findhex <file.pcap> <hex>     packets (and embedded bundles) containing the bytes, e.g. fa030000
+        aionmeter-cli pets <file.pcap> [more.pcap]  pet collection, soul drops and nearby soul sources, in capture order
         aionmeter-cli replay <file.pcap> --boss --brief   player counts per fight only
         aionmeter-cli crits <file.pcap>             damage-type / modifier statistics per class (crit check)
         aionmeter-cli entities <file.pcap>          damage dealers that are not announced players, by spawn kind
@@ -199,6 +201,47 @@ int Find(string path, string text)
     replay.RunToEnd();
     Console.WriteLine($"\n{hits} packets contain \"{text}\", {embedded} embedded bundles");
     foreach (var (op, n) in perOpcode.OrderByDescending(x => x.Value)) Console.WriteLine($"   {Opcodes.Name(op),-12} {n}");
+    return 0;
+}
+
+// Runs captures through the pet tracker (state kept in memory only) and prints what the overlay would show.
+int Pets(string[] paths)
+{
+    var catalog = PetTracker.Core.PetCatalog.Load(Path.Combine(dataDir, "pets.json"));
+    Console.WriteLine($"catalog: {catalog.Pets.Count} pets");
+    var tracker = new PetTracker.Core.PetTrackerService(catalog, new PetTracker.Core.PetProgressStore(catalog));
+    string Name(int petId) => catalog.Pet(petId)?.Name ?? $"pet {petId}";
+    string Bar(PetTracker.Core.PetProgress p) => $"Lv {p.Level} {(p.Needed is { } n ? $"{p.Souls}/{n}" : "max")}";
+    tracker.Learner.Linked += (npc, pet) => Console.WriteLine($"   learned: NPC {npc} {data.NpcName(npc)} drops {Name(pet)}");
+    foreach (var path in paths)
+    {
+        Console.WriteLine($"== {Path.GetFileName(path)}");
+        var replay = new PcapReplaySource(data, path, realtime: false);
+        replay.EventDecoded += e =>
+        {
+            tracker.Process(e);
+            var at = DateTimeOffset.FromUnixTimeMilliseconds(e.TimeMs).ToLocalTime();
+            switch (e)
+            {
+                case PetCollectionEvent c:
+                    Console.WriteLine($"{at:HH:mm:ss} LOGIN snapshot: {c.Levels.Count} owned, {c.Souls.Count} with souls, active {Name(c.ActivePetId)}");
+                    break;
+                case PetSoulGainedEvent s:
+                    Console.WriteLine($"{at:HH:mm:ss} +{s.Souls} soul {Name(s.PetId)} -> " +
+                                      (tracker.Progress.HasSnapshot ? Bar(tracker.Progress.Get(s.PetId)) : "(waiting for a login snapshot)"));
+                    break;
+            }
+        };
+        replay.RunToEnd();
+    }
+    var snap = tracker.Snapshot();
+    Console.WriteLine($"\nnearby soul sources at end{(snap.HasCollection ? "" : " (no login snapshot: progress unknown)")}:");
+    foreach (var (genus, pets) in snap.NearbyByGenus)
+    {
+        Console.WriteLine($"  {genus}");
+        foreach (var p in pets)
+            Console.WriteLine($"     {p.Pet.Name,-28} {Bar(p.Progress),-14} {p.NearbyCount} nearby  [{string.Join(", ", p.NpcCodes.Select(c => data.NpcName(c)).Distinct())}]");
+    }
     return 0;
 }
 
