@@ -8,35 +8,38 @@ using PetTracker.Core;
 namespace AionMeter.App.Windows;
 
 /// <summary>
-/// Small always-on-top list of the pet soul sources around the character, grouped by genus, with level and souls.
-/// Nothing else: right-click for size, rows, lock, hide; Ctrl + wheel resizes; drag to move.
+/// Small, quiet always-on-top list of the pet soul sources around the character: genus dot, name, souls and a hairline
+/// progress bar. × on a hovered row removes a pet until its mobs show up again. Right-click for size, background,
+/// rows and lock; Ctrl + wheel resizes; drag to move.
 /// </summary>
 public partial class PetOverlayWindow : Window
 {
     private const string CreditUrl = "https://metabot.gg/en/aion-2/mounts";
-    private const double BarWidth = 86;
+    // Panel width 232 − padding 15 − border 2 − dot column 11 − × column 16.
+    private const double BarWidth = 188;
     private static UiText T => UiText.Current;
 
     private static readonly Dictionary<Genus, Color> GenusColors = new()
     {
-        [Genus.Cogni] = Color.FromRgb(0x7C, 0xC4, 0xFF),
-        [Genus.Fera] = Color.FromRgb(0xF0, 0x9A, 0x5A),
-        [Genus.Natura] = Color.FromRgb(0x7D, 0xD8, 0x8A),
-        [Genus.Varian] = Color.FromRgb(0xC7, 0x8C, 0xF5),
-        [Genus.Special] = Color.FromRgb(0xF7, 0xC9, 0x48),
-        [Genus.Unknown] = Color.FromRgb(0xA0, 0xA0, 0xA0),
+        [Genus.Cogni] = Color.FromRgb(0x7C, 0xB8, 0xE8),
+        [Genus.Fera] = Color.FromRgb(0xE0, 0x9A, 0x66),
+        [Genus.Natura] = Color.FromRgb(0x82, 0xC9, 0x8E),
+        [Genus.Varian] = Color.FromRgb(0xB8, 0x94, 0xE0),
+        [Genus.Special] = Color.FromRgb(0xE6, 0xC2, 0x5C),
+        [Genus.Unknown] = Color.FromRgb(0x9A, 0x9A, 0x9A),
     };
+
+    private static readonly (string Label, double Opacity)[] Backgrounds = [("Off", 0), ("Low", 0.35), ("Medium", 0.55), ("High", 0.8)];
 
     private readonly MeterService _meter;
     private int _shownVersion = -1;
     private long _lastFullRefresh;
 
-    /// <summary>One line of the list: a genus header or a pet.</summary>
-    public sealed record Line(
-        string Header, string Name, string Count, string Level, string Souls, double FillWidth, Brush Accent, Brush NameBrush, string? Tip)
+    /// <summary>One pet in the list.</summary>
+    public sealed record Line(int PetId, string Name, string Count, string Souls, double FillWidth, Brush Accent, double RowOpacity,
+        string Tip, string RemoveTip)
     {
-        public Visibility HeaderVisibility => Header.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility RowVisibility => Header.Length > 0 ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility BarVisibility => FillWidth >= 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
     public PetOverlayWindow(MeterService meter)
@@ -48,10 +51,11 @@ public partial class PetOverlayWindow : Window
         Left = s.PetOverlayLeft;
         Top = s.PetOverlayTop;
         ApplySize();
+        ApplyBackground();
         Controls.DragAnywhere.Attach(this, () => !_meter.Settings.PetOverlayLocked, SavePosition);
         MouseRightButtonUp += (_, e) =>
         {
-            ShowOptions();
+            ShowOptions((e.OriginalSource as FrameworkElement)?.DataContext as Line);
             e.Handled = true;
         };
         PreviewMouseWheel += OnWheel;
@@ -67,47 +71,37 @@ public partial class PetOverlayWindow : Window
         _lastFullRefresh = now;
 
         var snap = _meter.Pets.Snapshot();
-        var lines = new List<Line>();
+        var all = snap.NearbyByGenus.SelectMany(g => g.Value.Select(p => (Genus: g.Key, Pet: p))).ToList();
         var maxRows = _meter.Settings.PetOverlayMaxRows;
-        var total = snap.NearbyByGenus.Values.Sum(p => p.Count);
-        var shown = 0;
-        foreach (var (genus, pets) in snap.NearbyByGenus)
-        {
-            if (shown >= maxRows) break;
-            var accent = new SolidColorBrush(GenusColors[genus]);
-            lines.Add(new Line(genus.ToString().ToUpperInvariant(), "", "", "", "", 0, accent, accent, null));
-            foreach (var p in pets.Take(maxRows - shown))
-            {
-                lines.Add(Row(p, accent, snap.HasCollection));
-                shown++;
-            }
-        }
-        if (total > shown)
-            lines.Add(new Line(string.Format(T.PetsMore, total - shown), "", "", "", "", 0,
-                (Brush)FindResource("TextMute"), Brushes.Transparent, null));
+        List.ItemsSource = all.Take(maxRows).Select(x => Row(x.Pet, GenusColors[x.Genus], snap.HasCollection)).ToList();
 
-        List.ItemsSource = lines;
-        EmptyText.Text = !snap.HasCollection && total == 0 ? T.PetsNeedLogin : T.PetsNoneNearby;
-        EmptyText.Visibility = total == 0 ? Visibility.Visible : Visibility.Collapsed;
-        Panel.ToolTip = snap.HasCollection ? null : T.PetsNeedLogin;
+        MoreText.Text = all.Count > maxRows ? string.Format(T.PetsMore, all.Count - maxRows) : "";
+        MoreText.Visibility = all.Count > maxRows ? Visibility.Visible : Visibility.Collapsed;
+        EmptyText.Text = snap.HasCollection ? T.PetsNoneNearby : T.PetsNeedLogin;
+        EmptyText.Visibility = all.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    private Line Row(NearbyPet p, Brush accent, bool known)
+    private Line Row(NearbyPet p, Color genus, bool known)
     {
         var pr = p.Progress;
+        var accent = new SolidColorBrush(genus);
         var names = string.Join(", ", p.NpcCodes.Select(_meter.Data.NpcName).Distinct());
-        var tip = string.Format(T.PetsNearbyTip, p.NearbyCount, names);
-        // Kept up after its last source died: dimmed, until more come into view or it times out.
-        var gone = p.NearbyCount == 0;
-        var count = gone ? "×0" : $"×{p.NearbyCount}";
-        Brush NameBrush(string key) => (Brush)FindResource(gone ? "TextMute" : key);
-        if (!known) return new Line("", p.Pet.Name, count, "", "?", 0, accent, NameBrush("Text"), tip);
-        if (pr.Needed is not { } needed)
-            return new Line("", p.Pet.Name, count, T.PetsMax, "", BarWidth, accent, (Brush)FindResource("TextMute"), tip);
-        var level = pr.Level == 0 ? T.PetsNew : $"Lv{pr.Level}";
-        var fill = BarWidth * Math.Clamp(pr.Souls / (double)needed, 0, 1);
-        return new Line("", p.Pet.Name, count, level, $"{pr.Souls}/{needed}", fill, accent,
-            NameBrush(pr.Level == 0 ? "GoldBright" : "Text"), tip);
+        var tip = $"{p.Pet.Genus} · " + string.Format(T.PetsNearbyTip, p.NearbyCount, names);
+        var remove = string.Format(T.PetsRemoveTip, p.Pet.Name);
+        // Kept up after its last source died: faded, until more come into view or it times out.
+        var opacity = p.NearbyCount == 0 ? 0.45 : 1.0;
+        var count = p.NearbyCount > 1 ? $"×{p.NearbyCount}" : "";
+        if (!known) return new Line(p.Pet.Id, p.Pet.Name, count, "?", -1, accent, opacity, tip, remove);
+        if (pr.Needed is not { } needed) return new Line(p.Pet.Id, p.Pet.Name, count, T.PetsMax, -1, accent, opacity * 0.6, tip, remove);
+        var souls = pr.Level == 0 ? $"{T.PetsNew} {pr.Souls}/{needed}" : $"Lv{pr.Level}  {pr.Souls}/{needed}";
+        return new Line(p.Pet.Id, p.Pet.Name, count, souls, BarWidth * Math.Clamp(pr.Souls / (double)needed, 0, 1), accent, opacity, tip, remove);
+    }
+
+    private void Remove_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.DataContext is not Line line) return;
+        _meter.Pets.Dismiss(line.PetId);
+        Refresh(force: true);
     }
 
     // ------------------------------------------------------------ options
@@ -117,6 +111,13 @@ public partial class PetOverlayWindow : Window
         var scale = _meter.Settings.PetOverlaySize / 100.0;
         Scale.ScaleX = scale;
         Scale.ScaleY = scale;
+    }
+
+    private void ApplyBackground()
+    {
+        PanelFill.Opacity = _meter.Settings.PetOverlayOpacity;
+        // With no background at all the hairline frame would float alone.
+        Panel.BorderBrush = _meter.Settings.PetOverlayOpacity <= 0 ? Brushes.Transparent : new SolidColorBrush(Color.FromArgb(0x14, 0xFF, 0xFF, 0xFF));
     }
 
     private void SetSize(int percent)
@@ -136,33 +137,38 @@ public partial class PetOverlayWindow : Window
         e.Handled = true;
     }
 
-    private void ShowOptions()
+    /// <param name="row">The pet right-clicked on, if any: offered for removal at the top.</param>
+    private void ShowOptions(Line? row)
     {
         var s = _meter.Settings;
         var menu = new ContextMenu { PlacementTarget = this };
 
-        var size = new MenuItem { Header = T.PetsSize };
-        foreach (var (label, pct) in new[] { ("S", 80), ("M", 100), ("L", 125), ("XL", 150) })
+        if (row is not null)
         {
-            var item = new MenuItem { Header = $"{label}  ({pct}%)", IsCheckable = true, IsChecked = s.PetOverlaySize == pct };
-            item.Click += (_, _) => SetSize(pct);
-            size.Items.Add(item);
-        }
-        menu.Items.Add(size);
-
-        var rows = new MenuItem { Header = T.PetsRows };
-        foreach (var n in AppSettings.PetRowChoices)
-        {
-            var item = new MenuItem { Header = n.ToString(), IsCheckable = true, IsChecked = s.PetOverlayMaxRows == n };
-            item.Click += (_, _) =>
+            var remove = new MenuItem { Header = string.Format(T.PetsRemove, row.Name) };
+            remove.Click += (_, _) =>
             {
-                s.PetOverlayMaxRows = n;
-                s.Save();
+                _meter.Pets.Dismiss(row.PetId);
                 Refresh(force: true);
             };
-            rows.Items.Add(item);
+            menu.Items.Add(remove);
+            menu.Items.Add(new Separator());
         }
-        menu.Items.Add(rows);
+
+        menu.Items.Add(Choices(T.PetsSize, new[] { ("S", 80), ("M", 100), ("L", 125), ("XL", 150) },
+            pct => s.PetOverlaySize == pct, SetSize));
+        menu.Items.Add(Choices(T.PetsBackground, Backgrounds, o => Math.Abs(s.PetOverlayOpacity - o) < 0.01, o =>
+        {
+            s.PetOverlayOpacity = o;
+            s.Save();
+            ApplyBackground();
+        }));
+        menu.Items.Add(Choices(T.PetsRows, AppSettings.PetRowChoices.Select(n => (n.ToString(), n)), n => s.PetOverlayMaxRows == n, n =>
+        {
+            s.PetOverlayMaxRows = n;
+            s.Save();
+            Refresh(force: true);
+        }));
 
         var locked = new MenuItem { Header = T.PetsLock, IsCheckable = true, IsChecked = s.PetOverlayLocked };
         locked.Click += (_, _) =>
@@ -181,6 +187,19 @@ public partial class PetOverlayWindow : Window
         hide.Click += (_, _) => Hidden?.Invoke();
         menu.Items.Add(hide);
         menu.IsOpen = true;
+    }
+
+    private static MenuItem Choices<TValue>(string header, IEnumerable<(string Label, TValue Value)> choices, Func<TValue, bool> isCurrent,
+        Action<TValue> pick)
+    {
+        var parent = new MenuItem { Header = header };
+        foreach (var (label, value) in choices)
+        {
+            var item = new MenuItem { Header = label, IsCheckable = true, IsChecked = isCurrent(value) };
+            item.Click += (_, _) => pick(value);
+            parent.Items.Add(item);
+        }
+        return parent;
     }
 
     /// <summary>The user hid the overlay from its own menu (the app saves that and hides it).</summary>

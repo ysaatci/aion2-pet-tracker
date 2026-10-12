@@ -96,6 +96,9 @@ public sealed class UiText
     public string PetsNew { get; init; } = "NEW";
     public string PetsMore { get; init; } = "+{0} more";
     public string PetsSize { get; init; } = "Size";
+    public string PetsBackground { get; init; } = "Background";
+    public string PetsRemove { get; init; } = "Remove {0}";
+    public string PetsRemoveTip { get; init; } = "Remove {0} until its mobs show up again";
     public string PetsRows { get; init; } = "Rows";
     public string PetsLock { get; init; } = "Lock position";
     public string PetsHide { get; init; } = "Hide ({0})";

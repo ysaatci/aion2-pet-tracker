@@ -62,7 +62,7 @@ public static class SampleRenderer
                 break;
             case "pets" or "pets-login":
                 if (o.Window == "pets") FeedPets(meter);
-                var pets = new PetOverlayWindow(meter) { Width = o.Width ?? 340, Height = o.Height ?? 330 };
+                var pets = new PetOverlayWindow(meter) { Width = o.Width ?? 236, Height = o.Height ?? 250 };
                 host = pets;
                 refresh = () => pets.Refresh(force: true);
                 break;

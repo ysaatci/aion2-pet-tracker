@@ -57,6 +57,8 @@ public sealed class AppSettings
     public static readonly int[] PetRowChoices = [3, 5, 8, 12];
     public int PetOverlayMaxRows { get; set; } = 8;
     public bool PetOverlayLocked { get; set; }
+    /// <summary>Background opacity behind the pet list: 0 (none) to 0.8.</summary>
+    public double PetOverlayOpacity { get; set; } = 0.55;
 
     // Boss respawn timers
     /// <summary>Tray notification this many minutes before a tracked boss respawns; 0 = off.</summary>

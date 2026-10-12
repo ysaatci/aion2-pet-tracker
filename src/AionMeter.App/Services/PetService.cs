@@ -42,6 +42,12 @@ public sealed class PetService
         }
     }
 
+    /// <summary>The overlay's ×: off the list until one of the pet's mobs comes into view again.</summary>
+    public void Dismiss(int petId)
+    {
+        lock (_gate) _tracker.Dismiss(petId);
+    }
+
     public PetOverlaySnapshot Snapshot()
     {
         lock (_gate) return _tracker.Snapshot(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
