@@ -17,7 +17,7 @@
     <Product>AION2 Pet Tracker</Product>
     <AssemblyTitle>AION2 Pet Tracker</AssemblyTitle>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>$(NoWarn);WFO0003</NoWarn>
