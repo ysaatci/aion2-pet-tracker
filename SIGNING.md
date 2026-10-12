@@ -1,6 +1,10 @@
 # Code signing with SignPath
 
-Releases are signed for free by [SignPath.io](https://about.signpath.io) with a certificate from the
+Signing is optional. Unsigned releases run on most PCs: SmartScreen asks once ("More info" → "Run anyway"),
+like it does for other unsigned game tools. Only PCs with Smart App Control turned on refuse unsigned programs
+outright. Signing removes both the warning and that block.
+
+Releases can be signed for free by [SignPath.io](https://about.signpath.io) with a certificate from the
 [SignPath Foundation](https://signpath.org). The repository is already prepared:
 
 - `.github/workflows/ci.yml` tests and builds every push in GitHub Actions. SignPath only signs builds made by CI

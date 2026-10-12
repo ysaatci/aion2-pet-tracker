@@ -13,9 +13,10 @@ Needs: Windows 10 or 11 (64-bit), AION 2 Global (EU / NA), and Npcap.
 Using it
 The small "Nearby pets" overlay lists the monsters around you that drop pet souls, with the pet's level and
 souls toward the next level (5 to unlock, 25, 75). Pets whose mobs you just killed stay listed for 5 minutes.
-  - Drag it anywhere. Right-click: size, background, rows, lock, hide.
+  - In game, hold Alt to get the cursor. Hover the overlay: - / + change its size, x hides it. Drag to move it.
+  - The pet you are farming sits on top; it follows your latest soul drop. Click a pet in the "more pets nearby"
+    list to pin it instead; the pin icon lets go again.
   - Hover a row and click the x to remove that pet until its mobs show up again.
-  - Ctrl + mouse wheel over it: bigger / smaller.
   - Ctrl+Shift+P shows / hides it (change it in Settings, from the tray icon's menu).
 
 The gold "A" in the notification area (next to the clock) opens the menu. The tracker is built on a DPS meter,

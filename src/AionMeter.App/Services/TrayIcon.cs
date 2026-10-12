@@ -14,6 +14,7 @@ public sealed class TrayIcon : IDisposable
     private readonly ToolStripMenuItem _history;
     private readonly ToolStripMenuItem _timers;
     private readonly ToolStripMenuItem _pets;
+    private readonly ToolStripMenuItem _petCredit;
     private readonly ToolStripMenuItem _settings;
     private readonly ToolStripMenuItem _language;
     private readonly ToolStripMenuItem _demo;
@@ -41,6 +42,7 @@ public sealed class TrayIcon : IDisposable
         _history = new ToolStripMenuItem("", null, (_, _) => actions.History());
         _timers = new ToolStripMenuItem("", null, (_, _) => actions.BossTimers());
         _pets = new ToolStripMenuItem("", null, (_, _) => actions.Pets());
+        _petCredit = new ToolStripMenuItem("", null, (_, _) => OpenPetDataPage());
         _settings = new ToolStripMenuItem("", null, (_, _) => actions.Settings());
         _language = new ToolStripMenuItem("", null, (_, _) => actions.ToggleLanguage());
         _demo = new ToolStripMenuItem("", null, (_, _) => actions.Demo());
@@ -49,7 +51,7 @@ public sealed class TrayIcon : IDisposable
         menu.Items.AddRange([
             _update, _updateSeparator,
             _toggle, _clickThrough, _reset, new ToolStripSeparator(),
-            _history, _timers, _pets, _settings, _language, _demo, _replay, _checkUpdates, new ToolStripSeparator(),
+            _history, _timers, _pets, _settings, _language, _demo, _replay, _checkUpdates, _petCredit, new ToolStripSeparator(),
             _exit,
         ]);
         ApplyTexts();
@@ -84,6 +86,7 @@ public sealed class TrayIcon : IDisposable
         _history.Text = t.TrayHistory;
         _timers.Text = t.TrayTimers;
         _pets.Text = t.TrayPets;
+        _petCredit.Text = t.PetsCredit + "  ↗";
         _settings.Text = t.TraySettings;
         _language.Text = t.SwitchLanguage;
         _demo.Text = t.TrayDemo;
@@ -115,6 +118,19 @@ public sealed class TrayIcon : IDisposable
     {
         _balloonClick = onClick;
         _icon.ShowBalloonTip(4000, title, text, ToolTipIcon.Info);
+    }
+
+    /// <summary>Where the pet catalog comes from (MetaBot.GG asks for a link back).</summary>
+    private static void OpenPetDataPage()
+    {
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://metabot.gg/en/aion-2/mounts") { UseShellExecute = true });
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            Log.Error("Could not open the pet data page", ex);
+        }
     }
 
     /// <summary>Gold "A" on a dark disc, drawn at runtime so the repo needs no binary assets.</summary>

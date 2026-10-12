@@ -38,24 +38,38 @@
         </Style>
     </Window.Resources>
 
-    <Border x:Name="Panel" CornerRadius="6" Padding="10,7,7,7" Width="236" BorderThickness="1">
+    <Border x:Name="Panel" CornerRadius="6" Padding="10,7,7,7" Width="236" BorderThickness="1" BorderBrush="#14FFFFFF">
         <Border.Background>
-            <SolidColorBrush x:Name="PanelFill" Color="{StaticResource Bg0Color}" Opacity="0.55" />
+            <SolidColorBrush Color="{StaticResource Bg0Color}" Opacity="0.6" />
         </Border.Background>
         <Border.LayoutTransform>
             <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
         </Border.LayoutTransform>
         <StackPanel>
+            <!-- Header: the focus pet's genus; on the right the tools, which only show while the mouse is over the overlay
+                 (a pinned pet's pin stays visible) -->
+            <Grid MinHeight="14">
+                <TextBlock x:Name="FocusGenus" FontSize="9.5" FontWeight="Bold" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <StackPanel x:Name="HoverTools" Orientation="Horizontal" Visibility="Collapsed">
+                        <Button x:Name="SmallerButton" Style="{StaticResource Flat}" Padding="4,0" Click="Smaller_Click">
+                            <TextBlock Text="&#xE738;" FontFamily="{StaticResource IconFont}" FontSize="9" />
+                        </Button>
+                        <Button x:Name="LargerButton" Style="{StaticResource Flat}" Padding="4,0" Click="Larger_Click">
+                            <TextBlock Text="&#xE710;" FontFamily="{StaticResource IconFont}" FontSize="9" />
+                        </Button>
+                    </StackPanel>
+                    <Button x:Name="PinButton" Style="{StaticResource Flat}" Padding="4,0" Click="Pin_Click">
+                        <TextBlock x:Name="PinIcon" FontFamily="{StaticResource IconFont}" FontSize="10" />
+                    </Button>
+                    <Button x:Name="HideButton" Style="{StaticResource Flat}" Padding="4,0,1,0" Click="Hide_Click" Visibility="Collapsed">
+                        <TextBlock Text="&#xE711;" FontFamily="{StaticResource IconFont}" FontSize="9" />
+                    </Button>
+                </StackPanel>
+            </Grid>
             <!-- The pet being farmed -->
             <StackPanel x:Name="FocusCard" Background="Transparent">
                 <Grid>
-                    <TextBlock x:Name="FocusGenus" FontSize="9.5" FontWeight="Bold" VerticalAlignment="Center" />
-                    <Button x:Name="PinButton" Style="{StaticResource Flat}" HorizontalAlignment="Right" Padding="4,0,2,0"
-                            Click="Pin_Click">
-                        <TextBlock x:Name="PinIcon" FontFamily="{StaticResource IconFont}" FontSize="10" />
-                    </Button>
-                </Grid>
-                <Grid Margin="0,1,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />

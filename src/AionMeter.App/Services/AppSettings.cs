@@ -51,18 +51,13 @@ public sealed class AppSettings
     public bool PetOverlayVisible { get; set; } = true;
     public double PetOverlayLeft { get; set; } = 80;
     public double PetOverlayTop { get; set; } = 520;
-    public static readonly int[] PetSizes = [80, 100, 125, 150];
-    /// <summary>Pet overlay scale in percent: one of <see cref="PetSizes"/> (right-click the overlay, or Ctrl + wheel).</summary>
+    public static readonly int[] PetSizes = [80, 90, 100, 115, 130, 150];
+    /// <summary>Pet overlay scale in percent: one of <see cref="PetSizes"/> (the overlay's − / + buttons).</summary>
     public int PetOverlaySize { get; set; } = 100;
-    public static readonly int[] PetRowChoices = [3, 5, 8, 12];
-    public int PetOverlayMaxRows { get; set; } = 8;
-    public bool PetOverlayLocked { get; set; }
     /// <summary>The pet the player chose to farm; null = the overlay follows the latest soul drop.</summary>
     public int? PetFocusPinned { get; set; }
     /// <summary>The "more pets nearby" list is open.</summary>
     public bool PetDiscoveryOpen { get; set; }
-    /// <summary>Background opacity behind the pet list: 0 (none) to 0.8.</summary>
-    public double PetOverlayOpacity { get; set; } = 0.55;
 
     // Boss respawn timers
     /// <summary>Tray notification this many minutes before a tracked boss respawns; 0 = off.</summary>

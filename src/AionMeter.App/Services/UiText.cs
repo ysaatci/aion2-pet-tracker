@@ -1,4 +1,4 @@
-namespace AionMeter.App.Services;
+﻿namespace AionMeter.App.Services;
 
 /// <summary>
 /// All interface wording, in English (default) or Russian. Plain properties so XAML binds to them:
@@ -90,13 +90,10 @@ public sealed class UiText
         "Off: only the pet overlay shows; the DPS overlay never comes up by itself (its hotkey still opens it).";
     public string HkPets { get; init; } = "Nearby pets";
     public string TrayPets { get; init; } = "Nearby pets";
-    public string PetsNoneNearby { get; init; } = "No pet soul mobs nearby";
     public string PetsNeedLogin { get; init; } = "Log in again to load your pets";
     public string PetsMax { get; init; } = "MAX";
     public string PetsNew { get; init; } = "NEW";
     public string PetsMore { get; init; } = "+{0} more";
-    public string PetsSize { get; init; } = "Size";
-    public string PetsBackground { get; init; } = "Background";
     public string PetsFocusHint { get; init; } = "Kill a pet's mobs to start tracking it, or pick one below";
     public string PetsInView { get; init; } = "{0} in view";
     public string PetsNoneInView { get; init; } = "none in view";
@@ -104,17 +101,14 @@ public sealed class UiText
     public string PetsToNext { get; init; } = "{0} souls to Lv{1}";
     public string PetsPinTip { get; init; } = "Pin: keep showing this pet";
     public string PetsUnpinTip { get; init; } = "Pinned. Click to follow your latest soul drop instead";
-    public string PetsFocusThis { get; init; } = "Farm {0}";
-    public string PetsFollowLast { get; init; } = "Follow my latest soul drop";
     public string PetsClickToFocus { get; init; } = "Click to farm this pet";
     public string PetsOthers { get; init; } = "{0} more pets nearby";
     public string PetsOthersOne { get; init; } = "1 more pet nearby";
     public string PetsNoOthers { get; init; } = "No other pets nearby";
-    public string PetsRemove { get; init; } = "Remove {0}";
     public string PetsRemoveTip { get; init; } = "Remove {0} until its mobs show up again";
-    public string PetsRows { get; init; } = "Rows";
-    public string PetsLock { get; init; } = "Lock position";
-    public string PetsHide { get; init; } = "Hide ({0})";
+    public string PetsHide { get; init; } = "Hide ({0} shows it again)";
+    public string PetsSmaller { get; init; } = "Smaller";
+    public string PetsLarger { get; init; } = "Larger";
     public string PetsCredit { get; init; } = "Pet data: MetaBot.GG";
     public string PetsNearbyTip { get; init; } = "{0} nearby: {1}";
 

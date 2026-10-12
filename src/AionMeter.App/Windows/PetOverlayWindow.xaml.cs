@@ -1,6 +1,6 @@
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using AionMeter.App.Services;
@@ -12,14 +12,15 @@ namespace AionMeter.App.Windows;
 /// The pet being farmed, large (genus, name, a progress bar, souls), and one quiet line for the other pets around that
 /// opens into a list grouped by genus. Clicking a pet in the list pins it as the focus; the pin button lets go again
 /// (the focus then follows the last soul drop). × on a hovered row removes a pet until its mobs show up again.
-/// Right-click for size, background, rows and lock; Ctrl + wheel resizes; drag to move.
+/// While the mouse is over it: − / + for size and × to hide. Drag to move. In AION 2 the cursor shows while Alt is held,
+/// so everything here is plain left clicks — and the window never takes the focus from the game.
 /// </summary>
 public partial class PetOverlayWindow : Window
 {
-    private const string CreditUrl = "https://metabot.gg/en/aion-2/mounts";
     // Content width 217 (panel 236 − padding 17 − border 2): the focus bar keeps 3 px from the edge, list bars 16 for the ×.
     private const double FocusBarWidth = 214;
     private const double RowBarWidth = 201;
+    private const int MaxListRows = 8;
     private const string PinGlyph = "", PinnedGlyph = "";
     private static UiText T => UiText.Current;
 
@@ -33,13 +34,12 @@ public partial class PetOverlayWindow : Window
         [Genus.Unknown] = Color.FromRgb(0x9A, 0x9A, 0x9A),
     };
 
-    private static readonly (string Label, double Opacity)[] Backgrounds = [("Off", 0), ("Low", 0.35), ("Medium", 0.55), ("High", 0.8)];
-
     private readonly MeterService _meter;
     private int _shownVersion = -1;
     private long _lastFullRefresh;
     private (int PetId, int Level, int Souls)? _shownFocus;
     private NearbyPet? _focus;
+    private bool _pinned;
 
     /// <summary>One line of the nearby list: a genus header (<see cref="Header"/> set) or a pet.</summary>
     public sealed record Line(string Header, int PetId, string Name, string Count, string Souls, double FillWidth, Brush Accent,
@@ -56,19 +56,20 @@ public partial class PetOverlayWindow : Window
         _meter = meter;
         InitializeComponent();
         Title = T.PetsTitle;
-        var s = meter.Settings;
-        Left = s.PetOverlayLeft;
-        Top = s.PetOverlayTop;
+        Left = meter.Settings.PetOverlayLeft;
+        Top = meter.Settings.PetOverlayTop;
         ApplySize();
-        ApplyBackground();
-        Controls.DragAnywhere.Attach(this, () => !_meter.Settings.PetOverlayLocked, SavePosition);
-        MouseRightButtonUp += (_, e) =>
-        {
-            var row = (e.OriginalSource as FrameworkElement)?.DataContext as Line;
-            ShowOptions(row is { Header.Length: 0 } ? row : null, FocusCard.IsMouseOver ? _focus : null);
-            e.Handled = true;
-        };
-        PreviewMouseWheel += OnWheel;
+        SmallerButton.ToolTip = T.PetsSmaller;
+        LargerButton.ToolTip = T.PetsLarger;
+        HideButton.ToolTip = string.Format(T.PetsHide, meter.Settings.HotkeyPets);
+
+        // Clicking the overlay (Alt + click in game) must never pull the focus away from the game window: a fullscreen
+        // game that loses it minimises or redraws over everything.
+        SourceInitialized += (_, _) => NativeMethods.SetExStyle(new WindowInteropHelper(this).Handle,
+            NativeMethods.WS_EX_NOACTIVATE | NativeMethods.WS_EX_TOOLWINDOW);
+        Controls.DragAnywhere.Attach(this, dropped: SavePosition);
+        MouseEnter += (_, _) => ShowTools(true);
+        MouseLeave += (_, _) => ShowTools(false);
         Loaded += (_, _) => Refresh(force: true);
     }
 
@@ -83,6 +84,15 @@ public partial class PetOverlayWindow : Window
         var snap = _meter.Pets.Snapshot(_meter.Settings.PetFocusPinned);
         ShowFocus(snap);
         ShowNearby(snap);
+        ShowTools(IsMouseOver);
+    }
+
+    /// <summary>Size and hide only while the mouse is over the overlay; the pin too, unless a pet is pinned.</summary>
+    private void ShowTools(bool hover)
+    {
+        HoverTools.Visibility = hover ? Visibility.Visible : Visibility.Collapsed;
+        HideButton.Visibility = HoverTools.Visibility;
+        PinButton.Visibility = _focus is not null && (hover || _pinned) ? Visibility.Visible : Visibility.Collapsed;
     }
 
     // ------------------------------------------------------------ the pet being farmed
@@ -90,9 +100,11 @@ public partial class PetOverlayWindow : Window
     private void ShowFocus(PetOverlaySnapshot snap)
     {
         _focus = snap.Focus;
+        _pinned = snap.FocusPinned;
         if (snap.Focus is not { } f)
         {
             FocusCard.Visibility = Visibility.Collapsed;
+            FocusGenus.Text = "";
             FocusHint.Visibility = Visibility.Visible;
             FocusHint.Text = snap.HasCollection ? T.PetsFocusHint : T.PetsNeedLogin;
             _shownFocus = null;
@@ -108,7 +120,7 @@ public partial class PetOverlayWindow : Window
         FocusNearby.Text = f.NearbyCount > 0 ? string.Format(T.PetsInView, f.NearbyCount) : T.PetsNoneInView;
         FocusCard.ToolTip = string.Join(", ", f.NpcCodes.Select(_meter.Data.NpcName).Distinct());
         PinIcon.Text = snap.FocusPinned ? PinnedGlyph : PinGlyph;
-        PinButton.Foreground = snap.FocusPinned ? accent : (Brush)FindResource("TextMute");
+        PinButton.Foreground = snap.FocusPinned ? accent : (Brush)FindResource("TextDim");
         PinButton.ToolTip = snap.FocusPinned ? T.PetsUnpinTip : T.PetsPinTip;
         FocusFill.Background = accent;
 
@@ -148,12 +160,9 @@ public partial class PetOverlayWindow : Window
             new ColorAnimation(((SolidColorBrush)FindResource("Text")).Color, TimeSpan.FromSeconds(1.6)) { BeginTime = TimeSpan.FromSeconds(0.4) });
     }
 
-    private void Pin_Click(object sender, RoutedEventArgs e)
-    {
+    private void Pin_Click(object sender, RoutedEventArgs e) =>
         // Pinned: let go (follow the last soul drop). Following: keep this pet.
         SetFocus(_meter.Settings.PetFocusPinned is null ? _focus?.Pet.Id : null);
-        e.Handled = true;
-    }
 
     private void SetFocus(int? petId)
     {
@@ -183,14 +192,13 @@ public partial class PetOverlayWindow : Window
             return;
         }
         var lines = new List<Line>();
-        var maxRows = _meter.Settings.PetOverlayMaxRows;
         var shown = 0;
         foreach (var (genus, pets) in snap.NearbyByGenus)
         {
-            if (shown >= maxRows) break;
+            if (shown >= MaxListRows) break;
             var accent = new SolidColorBrush(GenusColors[genus]);
             lines.Add(new Line(genus.ToString().ToUpperInvariant(), 0, "", "", "", -1, accent, 1, null, null));
-            foreach (var p in pets.Take(maxRows - shown))
+            foreach (var p in pets.Take(MaxListRows - shown))
             {
                 lines.Add(Row(p, accent, snap.HasCollection));
                 shown++;
@@ -238,7 +246,7 @@ public partial class PetOverlayWindow : Window
         e.Handled = true;
     }
 
-    // ------------------------------------------------------------ options
+    // ------------------------------------------------------------ size, hide, position
 
     private void ApplySize()
     {
@@ -247,117 +255,24 @@ public partial class PetOverlayWindow : Window
         Scale.ScaleY = scale;
     }
 
-    private void ApplyBackground()
-    {
-        PanelFill.Opacity = _meter.Settings.PetOverlayOpacity;
-        // With no background at all the hairline frame would float alone.
-        Panel.BorderBrush = _meter.Settings.PetOverlayOpacity <= 0 ? Brushes.Transparent : new SolidColorBrush(Color.FromArgb(0x14, 0xFF, 0xFF, 0xFF));
-    }
+    private void Smaller_Click(object sender, RoutedEventArgs e) => StepSize(-1);
 
-    private void SetSize(int percent)
+    private void Larger_Click(object sender, RoutedEventArgs e) => StepSize(+1);
+
+    private void StepSize(int step)
     {
-        _meter.Settings.PetOverlaySize = percent;
+        var sizes = AppSettings.PetSizes;
+        var at = Array.IndexOf(sizes, _meter.Settings.PetOverlaySize);
+        if (at < 0) at = Array.IndexOf(sizes, 100);
+        _meter.Settings.PetOverlaySize = sizes[Math.Clamp(at + step, 0, sizes.Length - 1)];
         _meter.Settings.Save();
         ApplySize();
     }
 
-    private void OnWheel(object sender, MouseWheelEventArgs e)
-    {
-        if ((Keyboard.Modifiers & ModifierKeys.Control) == 0) return;
-        var sizes = AppSettings.PetSizes;
-        var at = Array.IndexOf(sizes, _meter.Settings.PetOverlaySize);
-        if (at < 0) at = Array.IndexOf(sizes, 100);
-        SetSize(sizes[Math.Clamp(at + (e.Delta > 0 ? 1 : -1), 0, sizes.Length - 1)]);
-        e.Handled = true;
-    }
-
-    /// <param name="row">A nearby pet right-clicked on: focus or remove it.</param>
-    /// <param name="focus">The focus card right-clicked on: pin or let go.</param>
-    private void ShowOptions(Line? row, NearbyPet? focus)
-    {
-        var s = _meter.Settings;
-        var menu = new ContextMenu { PlacementTarget = this };
-
-        if (row is not null)
-        {
-            menu.Items.Add(Item(string.Format(T.PetsFocusThis, row.Name), () => SetFocus(row.PetId)));
-            menu.Items.Add(Item(string.Format(T.PetsRemove, row.Name), () =>
-            {
-                _meter.Pets.Dismiss(row.PetId);
-                Refresh(force: true);
-            }));
-            menu.Items.Add(new Separator());
-        }
-        else if (focus is not null)
-        {
-            menu.Items.Add(s.PetFocusPinned is null
-                ? Item(string.Format(T.PetsFocusThis, focus.Pet.Name), () => SetFocus(focus.Pet.Id))
-                : Item(T.PetsFollowLast, () => SetFocus(null)));
-            menu.Items.Add(new Separator());
-        }
-
-        menu.Items.Add(Choices(T.PetsSize, new[] { ("S", 80), ("M", 100), ("L", 125), ("XL", 150) },
-            pct => s.PetOverlaySize == pct, SetSize));
-        menu.Items.Add(Choices(T.PetsBackground, Backgrounds, o => Math.Abs(s.PetOverlayOpacity - o) < 0.01, o =>
-        {
-            s.PetOverlayOpacity = o;
-            s.Save();
-            ApplyBackground();
-        }));
-        menu.Items.Add(Choices(T.PetsRows, AppSettings.PetRowChoices.Select(n => (n.ToString(), n)), n => s.PetOverlayMaxRows == n, n =>
-        {
-            s.PetOverlayMaxRows = n;
-            s.Save();
-            Refresh(force: true);
-        }));
-
-        var locked = new MenuItem { Header = T.PetsLock, IsCheckable = true, IsChecked = s.PetOverlayLocked };
-        locked.Click += (_, _) =>
-        {
-            s.PetOverlayLocked = !s.PetOverlayLocked;
-            s.Save();
-        };
-        menu.Items.Add(locked);
-        menu.Items.Add(new Separator());
-        menu.Items.Add(Item(T.PetsCredit + "  ↗", OpenCredit));
-        menu.Items.Add(Item(string.Format(T.PetsHide, s.HotkeyPets), () => Hidden?.Invoke()));
-        menu.IsOpen = true;
-    }
-
-    private static MenuItem Item(string header, Action click)
-    {
-        var item = new MenuItem { Header = header };
-        item.Click += (_, _) => click();
-        return item;
-    }
-
-    private static MenuItem Choices<TValue>(string header, IEnumerable<(string Label, TValue Value)> choices, Func<TValue, bool> isCurrent,
-        Action<TValue> pick)
-    {
-        var parent = new MenuItem { Header = header };
-        foreach (var (label, value) in choices)
-        {
-            var item = new MenuItem { Header = label, IsCheckable = true, IsChecked = isCurrent(value) };
-            item.Click += (_, _) => pick(value);
-            parent.Items.Add(item);
-        }
-        return parent;
-    }
-
-    /// <summary>The user hid the overlay from its own menu (the app saves that and hides it).</summary>
+    /// <summary>The user hid the overlay with its × (the app saves that and closes it; the hotkey brings it back).</summary>
     public event Action? Hidden;
 
-    private static void OpenCredit()
-    {
-        try
-        {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(CreditUrl) { UseShellExecute = true });
-        }
-        catch (System.ComponentModel.Win32Exception ex)
-        {
-            Log.Error("Could not open the pet data page", ex);
-        }
-    }
+    private void Hide_Click(object sender, RoutedEventArgs e) => Hidden?.Invoke();
 
     private void SavePosition()
     {

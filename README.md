@@ -13,7 +13,8 @@ far each of those pets is from its next level.
   drops.
 - A pet whose last mob you killed stays listed (faded) for 5 minutes. **×** removes a pet until its mobs show up
   again.
-- Sizes S / M / L / XL, background opacity and number of rows (right-click). **Ctrl+Shift+P** shows or hides it.
+- Hold **Alt** in game to get the cursor, then hover the overlay for **− / +** (size) and **×** (hide). Drag to move.
+  Clicking it never takes focus away from the game. **Ctrl+Shift+P** shows or hides it.
 
 ## Download
 
