@@ -117,6 +117,9 @@ public static class SampleRenderer
         }
     }
 
+    /// <summary>More souls for the focus pet in the pet samples (<c>--souls N</c>): frames for a short clip of it filling up.</summary>
+    public static int PetSampleExtraSouls { get; set; }
+
     /// <summary>A login snapshot and a mixed field around the character: one or two soul sources of every genus.</summary>
     private static void FeedPets(MeterService meter)
     {
@@ -139,7 +142,7 @@ public static class SampleRenderer
             for (var n = 0; n < 1 + (int)(actor % 3); n++)
                 meter.Pets.Process(new NpcSeenEvent(now - 5_000, actor++, p.SourceNpcs[0]));
         // Farming the first pick: its soul dropped last, so it is the focus.
-        meter.Pets.Process(new PetSoulGainedEvent(now - 2_000, picks[0].Id, 1));
+        meter.Pets.Process(new PetSoulGainedEvent(now - 2_000, picks[0].Id, 1 + PetSampleExtraSouls));
     }
 
     private static MeterService CreateMeter(string language, int rowSize = 100)

@@ -68,6 +68,7 @@ public partial class App : Application
                     System.Globalization.CultureInfo.InvariantCulture, out var scale) ? scale : 1.5,
                 int.TryParse(ArgValue(e.Args, "--row-size"), out var rowSize) ? rowSize : 100);
             var language = ArgValue(e.Args, "--lang") ?? "en";
+            if (int.TryParse(ArgValue(e.Args, "--souls"), out var souls)) SampleRenderer.PetSampleExtraSouls = souls; // pet samples
             if (double.TryParse(ArgValue(e.Args, "--animate"), System.Globalization.NumberStyles.Float,
                     System.Globalization.CultureInfo.InvariantCulture, out var seconds))
                 SampleRenderer.Animate(samplePath, language, options, seconds, int.TryParse(ArgValue(e.Args, "--fps"), out var fps) ? fps : 10);
