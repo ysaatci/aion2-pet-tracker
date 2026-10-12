@@ -100,16 +100,47 @@ public class PetTrackerTests
         Assert.Empty(tracker.Snapshot().NearbyByGenus);
     }
 
+    // Kill credit and death packet both report the kill; the soul follows ~0.35 s later.
+    private static void KillWithSoul(PetTrackerService tracker, uint actor, int npc, long at, int pet)
+    {
+        tracker.Process(new NpcSeenEvent(at - 10_000, actor, npc));
+        tracker.Process(new DeathEvent(at, actor));
+        tracker.Process(new DeathEvent(at + 50, actor));
+        tracker.Process(new PetSoulGainedEvent(at + 350, pet, 1));
+    }
+
     [Fact]
-    public void A_soul_after_a_kill_teaches_an_unknown_source()
+    public void Two_souls_after_kills_teach_an_unknown_source()
     {
         var catalog = Catalog();
         var tracker = new PetTrackerService(catalog, new PetProgressStore(catalog));
-        tracker.Process(new NpcSeenEvent(1_000, 7, UnknownNpc));
-        tracker.Process(new DeathEvent(5_000, 7));
-        tracker.Process(new PetSoulGainedEvent(5_350, Varg, 1));
+        KillWithSoul(tracker, 7, UnknownNpc, 20_000, Varg);
+        Assert.Empty(tracker.Learner.Learned);
+        KillWithSoul(tracker, 8, UnknownNpc, 40_000, Varg);
         Assert.Contains(Varg, catalog.PetsDroppedBy(UnknownNpc));
         Assert.Equal((UnknownNpc, Varg), Assert.Single(tracker.Learner.Learned));
+    }
+
+    [Fact]
+    public void A_death_never_seen_spawning_makes_the_window_ambiguous()
+    {
+        var catalog = Catalog();
+        var tracker = new PetTrackerService(catalog, new PetProgressStore(catalog));
+        for (var i = 0; i < 3; i++)
+        {
+            var at = 20_000L + i * 20_000;
+            tracker.Process(new DeathEvent(at, 500 + (uint)i));    // the real source, spawned before the tracker
+            KillWithSoul(tracker, 600 + (uint)i, UnknownNpc, at + 100, Varg);
+        }
+        Assert.Empty(tracker.Learner.Learned);
+    }
+
+    [Fact]
+    public void Soul_drops_before_any_snapshot_are_ignored()
+    {
+        var store = new PetProgressStore(Catalog());
+        Assert.Null(store.ApplySoul(1_000, Varg, 1));
+        Assert.Equal(0, store.Get(Varg).Souls);
     }
 
     [Fact]

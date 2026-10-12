@@ -20,6 +20,8 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
 {
     private readonly NearbyNpcTracker _nearby = new();
     private PetProgress? _lastDrop;
+    private uint _selfId;
+    private readonly Dictionary<uint, long> _deaths = new();
     private long _nowMs;
 
     public SoulSourceLearner Learner { get; } = new(catalog);
@@ -41,15 +43,29 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
                 break;
             case PetSoulGainedEvent s:
                 Learner.SoulDropped(s.TimeMs, s.PetId);
-                _lastDrop = progress.ApplySoul(s.TimeMs, s.PetId, s.Souls);
+                _lastDrop = progress.ApplySoul(s.TimeMs, s.PetId, s.Souls) ?? _lastDrop;
                 break;
             case NpcSeenEvent n:
                 _nearby.Seen(n.TimeMs, n.ActorId, n.NpcCode, n.X, n.Y, n.Z);
                 changed = catalog.PetsDroppedBy(n.NpcCode).Count > 0;
                 break;
             case DeathEvent d:
-                if (_nearby.Died(d.ActorId) is { } code) Learner.NpcDied(d.TimeMs, code);
-                else changed = false;
+                // A kill arrives twice (kill credit and death packet): only the first one counts.
+                if (_deaths.TryGetValue(d.ActorId, out var last) && d.TimeMs - last < SoulSourceLearner.WindowMs)
+                {
+                    changed = false;
+                    break;
+                }
+                _deaths[d.ActorId] = d.TimeMs;
+                if (_deaths.Count > 512) PruneDeaths(d.TimeMs);
+                var died = _nearby.Died(d.ActorId);
+                // An entity never seen spawning may still be the kill behind a soul: it makes the window ambiguous.
+                if (!d.AlreadyDead && d.ActorId != _selfId) Learner.NpcDied(d.TimeMs, died ?? SoulSourceLearner.UnknownNpc);
+                changed = died is { } code && catalog.PetsDroppedBy(code).Count > 0;
+                break;
+            case SelfIdentifiedEvent self:
+                _selfId = self.ActorId;
+                changed = false;
                 break;
             case ZoneChangedEvent:
                 _nearby.Clear();
@@ -68,6 +84,12 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
                 break;
         }
         if (changed) Changed?.Invoke();
+    }
+
+    private void PruneDeaths(long nowMs)
+    {
+        foreach (var id in _deaths.Where(kv => nowMs - kv.Value > SoulSourceLearner.WindowMs).Select(kv => kv.Key).ToList())
+            _deaths.Remove(id);
     }
 
     public PetOverlaySnapshot Snapshot()

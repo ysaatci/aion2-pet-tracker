@@ -85,8 +85,10 @@ public sealed class PetProgressStore
         _storage?.Save(_state);
     }
 
-    public PetProgress ApplySoul(long timeMs, int petId, int gained)
+    /// <summary>Adds a soul drop; ignored (null) until a login snapshot exists, which already counts earlier drops.</summary>
+    public PetProgress? ApplySoul(long timeMs, int petId, int gained)
     {
+        if (!HasSnapshot) return null;
         var level = _state.Levels.GetValueOrDefault(petId);
         var souls = _state.Souls.GetValueOrDefault(petId) + gained;
         while (Needed(petId, level) is { } needed && souls >= needed)
