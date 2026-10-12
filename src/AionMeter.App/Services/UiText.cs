@@ -107,6 +107,8 @@ public sealed class UiText
     public string PetsNoOthers { get; init; } = "No other pets nearby";
     public string PetsRemoveTip { get; init; } = "Remove {0} until its mobs show up again";
     public string PetsHide { get; init; } = "Hide ({0} shows it again)";
+    public string PetsHotkeyHint { get; init; } = "{0} hides / shows this overlay";
+    public string PetsHiddenBalloon { get; init; } = "Pet overlay hidden. Press {0} to show it again.";
     public string PetsSmaller { get; init; } = "Smaller";
     public string PetsLarger { get; init; } = "Larger";
     public string PetsCredit { get; init; } = "Pet data: MetaBot.GG";

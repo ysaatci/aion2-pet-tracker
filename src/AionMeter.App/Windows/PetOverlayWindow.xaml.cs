@@ -61,7 +61,6 @@ public partial class PetOverlayWindow : Window
         ApplySize();
         SmallerButton.ToolTip = T.PetsSmaller;
         LargerButton.ToolTip = T.PetsLarger;
-        HideButton.ToolTip = string.Format(T.PetsHide, meter.Settings.HotkeyPets);
 
         // Clicking the overlay (Alt + click in game) must never pull the focus away from the game window: a fullscreen
         // game that loses it minimises or redraws over everything.
@@ -92,6 +91,9 @@ public partial class PetOverlayWindow : Window
     {
         HoverTools.Visibility = hover ? Visibility.Visible : Visibility.Collapsed;
         HideButton.Visibility = HoverTools.Visibility;
+        HotkeyHint.Visibility = HoverTools.Visibility;
+        HotkeyHint.Text = string.Format(T.PetsHotkeyHint, _meter.Settings.HotkeyPets); // Settings may have changed it
+        HideButton.ToolTip = string.Format(T.PetsHide, _meter.Settings.HotkeyPets);
         PinButton.Visibility = _focus is not null && (hover || _pinned) ? Visibility.Visible : Visibility.Collapsed;
     }
 

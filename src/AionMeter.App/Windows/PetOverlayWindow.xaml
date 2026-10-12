@@ -134,6 +134,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
             <TextBlock x:Name="MoreText" Foreground="{StaticResource TextMute}" FontSize="10" Margin="0,1,0,0" />
+            <!-- While hovered: the hotkey that brings the overlay back once hidden -->
+            <TextBlock x:Name="HotkeyHint" Foreground="{StaticResource TextMute}" FontSize="9.5" Margin="0,6,0,0" Visibility="Collapsed" />
         </StackPanel>
     </Border>
 </Window>

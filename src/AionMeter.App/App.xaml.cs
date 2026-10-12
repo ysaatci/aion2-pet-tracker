@@ -308,7 +308,12 @@ public partial class App : Application
         if (visible && _pets is null)
         {
             _pets = new PetOverlayWindow(_meter);
-            _pets.Hidden += () => SetPetsVisible(false);
+            _pets.Hidden += () =>
+            {
+                SetPetsVisible(false);
+                // Hidden with the mouse: say how to get it back (a hotkey user already knows).
+                _tray?.ShowBalloon(AppInfo.Name, string.Format(UiText.Current.PetsHiddenBalloon, _meter.Settings.HotkeyPets));
+            };
             _pets.Closed += (_, _) => _pets = null;
             _pets.Show();
         }
