@@ -1,0 +1,83 @@
+# Builds a release from a version tag (git tag v0.1.1 && git push origin v0.1.1):
+#   1. tests, then build-release.ps1 → dist\AION2PetTracker.exe (+ source zip)
+#   2. if SignPath is configured (repository variable SIGNPATH_ORGANIZATION_ID), the exe is sent to SignPath and the
+#      job waits until a release approver approves the signing request there; the signed exe replaces the unsigned one
+#   3. a DRAFT GitHub release with the files is created: check it, then publish it by hand.
+# Setup steps: SIGNING.md.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write   # create the draft release
+  actions: read     # SignPath downloads the unsigned artifact
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Test
+        run: dotnet test tests/AionMeter.Tests -c Release
+
+      - name: Check the tag matches the project version
+        shell: pwsh
+        run: |
+          $version = (Select-Xml -Path src/AionMeter.App/AionMeter.App.csproj -XPath "//Version").Node.InnerText
+          if ("v$version" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} does not match <Version>$version</Version>" }
+
+      - name: Build
+        shell: pwsh
+        run: ./build-release.ps1
+
+      - name: Upload the unsigned exe
+        id: unsigned
+        uses: actions/upload-artifact@v7
+        with:
+          name: unsigned-exe
+          path: dist/AION2PetTracker.exe
+          if-no-files-found: error
+
+      - name: Sign with SignPath
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600   # time for a release approver to approve in SignPath
+          output-artifact-directory: signed
+
+      - name: Package the signed exe
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        shell: pwsh
+        run: |
+          $sig = Get-AuthenticodeSignature signed/AION2PetTracker.exe
+          if ($sig.Status -ne 'Valid') { throw "Signed exe does not verify: $($sig.Status) $($sig.StatusMessage)" }
+          Copy-Item signed/AION2PetTracker.exe dist/AION2PetTracker.exe -Force
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          $stage = "dist/AION2PetTracker-v$version-win-x64"
+          Copy-Item signed/AION2PetTracker.exe "$stage/AION2PetTracker.exe" -Force
+          Remove-Item "$stage.zip"
+          Compress-Archive -Path "$stage/*" -DestinationPath "$stage.zip"
+
+      - name: Create the draft release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          $signed = "${{ vars.SIGNPATH_ORGANIZATION_ID }}" -ne ''
+          gh release create "${{ github.ref_name }}" --draft --generate-notes `
+            --title "AION2 Pet Tracker $version$(if (-not $signed) { ' (unsigned)' })" `
+            dist/AION2PetTracker.exe "dist/AION2PetTracker-v$version-win-x64.zip" "dist/AION2PetTracker-v$version-source.zip"

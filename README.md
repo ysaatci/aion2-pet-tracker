@@ -52,6 +52,35 @@ powershell -File build-release.ps1                                             #
 Projects: `AionMeter.Core` (capture, protocol), `PetTracker.Core` (catalog, progress, nearby pets), `AionMeter.App`
 (WPF overlay), `AionMeter.Cli` (developer tool), `AionMeter.Tests`.
 
+## Privacy
+
+The tracker has no accounts, telemetry, analytics or ads. Everything it learns stays on your PC, under
+`%APPDATA%\AION2PetTracker` (settings, your pet progress, logs kept for 14 days) and
+`%LOCALAPPDATA%\AION2PetTracker` (game data tables).
+
+- **What it reads:** only the traffic between your PC and the AION 2 game server, through Npcap. It shows your own
+  pet progress and the monsters near you. Other players' names and damage are never written to disk unless you
+  switch the built-in DPS meter on (Settings → "Show the DPS meter"). That meter keeps a local fight history.
+- **What it sends:** it never sends anything to the game. Its only network requests:
+  - **GitHub** (`api.github.com`), every 2 hours, asks for the latest release so it can tell you about updates. You
+    can turn this off in Settings → "Check GitHub for new versions". GitHub sees your IP address and the app version.
+  - Only while the DPS meter's windows are used: skill icons from NCSOFT's game-data CDN (`assets.playnccdn.com`) and
+    boss portraits from MetaBot.GG (`metabot.gg`). Settings → "Download skill icons and boss portraits" turns these off.
+- **Packet recordings** are off by default. If you turn them on, they're saved locally only.
+
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by
+[SignPath Foundation](https://signpath.org). Releases are built by GitHub Actions from this repository
+([release workflow](.github/workflows/release.yml)), and each signing request is approved by hand.
+
+| Role | Members |
+|---|---|
+| Committers and reviewers | [ysaatci](https://github.com/ysaatci) |
+| Approvers | [ysaatci](https://github.com/ysaatci) |
+
+See [SIGNING.md](SIGNING.md) for how releases are signed.
+
 ## Credits and licence
 
 - Built on [AION2 DPS Meter](https://github.com/cyberbadger6969/aion2-dps-meter) by cyberbadger6969 (GPL-3.0), whose
