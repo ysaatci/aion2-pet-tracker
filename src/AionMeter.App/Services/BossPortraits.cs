@@ -34,7 +34,7 @@ public sealed class BossPortraits
         Enabled = enabled;
         Directory.CreateDirectory(_cacheDir);
         _missesFile = Path.Combine(_cacheDir, "missing.json");
-        _http.DefaultRequestHeaders.UserAgent.ParseAdd("AION2DpsMeter/0.1 (portraits credited to MetaBot.GG)");
+        _http.DefaultRequestHeaders.UserAgent.ParseAdd("AION2PetTracker/0.1 (portraits credited to MetaBot.GG)");
         LoadMap(Path.Combine(dataDirectory, "boss_portraits.json"));
         LoadMisses();
         RemoveStaleDownloads();

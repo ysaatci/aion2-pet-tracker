@@ -26,7 +26,7 @@ public sealed class Updater : IDisposable
 {
     private static readonly TimeSpan FirstCheckDelay = TimeSpan.FromSeconds(20);
     private static readonly TimeSpan CheckInterval = TimeSpan.FromHours(2);
-    private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{AE1B2590-0A93-4500-9CB1-0F543771957A}_is1"; // AppId in installer/AION2DpsMeter.iss
+    private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{27D8681D-DA79-4717-B70E-F2FF09CD0A77}_is1"; // no installer yet: never present, so the tracker always runs as a portable copy
 
     private readonly AppSettings _settings;
     private readonly UpdateFeed _feed;
@@ -37,7 +37,7 @@ public sealed class Updater : IDisposable
     {
         _settings = settings;
         Current = UpdateFeed.Normalize(typeof(Updater).Assembly.GetName().Version ?? new Version(0, 0, 0));
-        _feed = new UpdateFeed($"AION2DpsMeter/{Current.ToString(3)}");
+        _feed = new UpdateFeed($"AION2PetTracker/{Current.ToString(3)}");
     }
 
     /// <summary>This copy's version (major.minor.patch).</summary>
@@ -192,7 +192,7 @@ public sealed class Updater : IDisposable
         }
     }
 
-    private static string DownloadFolder => Path.Combine(Path.GetTempPath(), "AION2DpsMeter-update");
+    private static string DownloadFolder => Path.Combine(Path.GetTempPath(), "AION2PetTracker-update");
 
     /// <summary>Installers of earlier updates are no longer needed (the one running right now is locked and stays).</summary>
     public static void CleanDownloads()

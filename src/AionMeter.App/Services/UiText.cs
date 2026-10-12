@@ -354,7 +354,7 @@ public sealed class UiText
     public string StatusPrefix { get; init; } = "Status: ";
     public string NpcapMissing { get; init; } = "Npcap not installed";
     public string NpcapNeeded { get; init; } =
-        "AION2 DPS Meter reads the game's own network traffic through Npcap, a free capture driver — and it is not installed yet.\n\n" +
+        "AION2 Pet Tracker reads the game's own network traffic through Npcap, a free capture driver — and it is not installed yet.\n\n" +
         "Install it from npcap.com with the default options (ExitLag and other ping boosters work with them too), then start the meter again.\n\n" +
         "Open the download page now?";
     public string SecHotkeys { get; init; } = "HOTKEYS";
@@ -369,13 +369,13 @@ public sealed class UiText
     public string OpenDataFolder { get; init; } = "Open data folder";
     public string OpenAppFolder { get; init; } = "Open app folder";
     public string Logs { get; init; } = "Logs";
-    public string Disclaimer { get; init; } = "AION2 DPS Meter only listens to your own network connection. It never reads game memory, injects anything or sends a byte to the game. Third-party tools may still be against the game's terms of service — use at your own risk.";
+    public string Disclaimer { get; init; } = "AION2 Pet Tracker only listens to your own network connection. It never reads game memory, injects anything or sends a byte to the game. Third-party tools may still be against the game's terms of service — use at your own risk.";
     public string Cancel { get; init; } = "Cancel";
     public string Save { get; init; } = "Save";
 
     // Updates
     public string UpdateTitle { get; init; } = "Update available";
-    public string UpdateHeadline { get; init; } = "AION2 DPS Meter {0} is out";
+    public string UpdateHeadline { get; init; } = "AION2 Pet Tracker {0} is out";
     public string UpdateYouHave { get; init; } = "You have {0}.";
     public string UpdateReleased { get; init; } = "You have {0}. The new one was released {1}.";
     public string UpdateWhatsNew { get; init; } = "WHAT'S NEW";
@@ -688,7 +688,7 @@ public sealed class UiText
         StatusPrefix = "Статус: ",
         NpcapMissing = "Npcap не установлен",
         NpcapNeeded =
-            "AION2 DPS Meter читает сетевой трафик игры через Npcap — бесплатный драйвер захвата, а он ещё не установлен.\n\n" +
+            "AION2 Pet Tracker читает сетевой трафик игры через Npcap — бесплатный драйвер захвата, а он ещё не установлен.\n\n" +
             "Установите его с npcap.com с настройками по умолчанию (с ними работают и ExitLag, и другие ускорители пинга), затем запустите метр снова.\n\n" +
             "Открыть страницу загрузки?",
         SecHotkeys = "ГОРЯЧИЕ КЛАВИШИ",
@@ -703,11 +703,11 @@ public sealed class UiText
         OpenDataFolder = "Папка данных",
         OpenAppFolder = "Папка программы",
         Logs = "Логи",
-        Disclaimer = "AION2 DPS Meter только слушает ваше собственное сетевое соединение. Он не читает память игры, ничего не внедряет и не отправляет в игру ни байта. Тем не менее сторонние программы могут нарушать правила игры — используйте на свой риск.",
+        Disclaimer = "AION2 Pet Tracker только слушает ваше собственное сетевое соединение. Он не читает память игры, ничего не внедряет и не отправляет в игру ни байта. Тем не менее сторонние программы могут нарушать правила игры — используйте на свой риск.",
         Cancel = "Отмена",
         Save = "Сохранить",
         UpdateTitle = "Доступно обновление",
-        UpdateHeadline = "Вышла версия AION2 DPS Meter {0}",
+        UpdateHeadline = "Вышла версия AION2 Pet Tracker {0}",
         UpdateYouHave = "У вас {0}.",
         UpdateReleased = "У вас {0}. Новая выпущена {1}.",
         UpdateWhatsNew = "ЧТО НОВОГО",

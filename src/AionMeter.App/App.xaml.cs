@@ -34,7 +34,7 @@ public static class AppHost
 
 public partial class App : Application
 {
-    private const string ShowRequestName = "AionMeter.ShowOverlay"; // set by a second start of the app
+    private const string ShowRequestName = "AION2PetTracker.ShowOverlay"; // set by a second start of the app
     private Mutex? _singleInstance;
     private EventWaitHandle? _showRequest;
     private RegisteredWaitHandle? _showWait;
@@ -76,7 +76,7 @@ public partial class App : Application
             Shutdown();
             return;
         }
-        _singleInstance = new Mutex(true, "AionMeter.SingleInstance", out var first);
+        _singleInstance = new Mutex(true, "AION2PetTracker.SingleInstance", out var first);
         if (!first)
         {
             // Started again (the shortcut clicked twice): the running meter shows its overlay, this copy leaves quietly.

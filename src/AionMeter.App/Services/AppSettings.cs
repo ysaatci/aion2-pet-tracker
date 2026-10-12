@@ -15,7 +15,7 @@ public enum HistoryMode
 public sealed class AppSettings
 {
     public static string AppDataDir { get; } =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AionMeter");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AION2PetTracker");
 
     private static string FilePath => Path.Combine(AppDataDir, "settings.json");
 

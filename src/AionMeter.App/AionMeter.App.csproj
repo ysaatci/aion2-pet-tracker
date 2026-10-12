@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\AionMeter.Core\AionMeter.Core.csproj" />
@@ -12,12 +12,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyName>AION2DpsMeter</AssemblyName>
+    <AssemblyName>AION2PetTracker</AssemblyName>
     <RootNamespace>AionMeter.App</RootNamespace>
-    <Product>AION2 DPS Meter</Product>
-    <AssemblyTitle>AION2 DPS Meter</AssemblyTitle>
+    <Product>AION2 Pet Tracker</Product>
+    <AssemblyTitle>AION2 Pet Tracker</AssemblyTitle>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
-    <Version>0.2.8</Version>
+    <Version>0.1.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>$(NoWarn);WFO0003</NoWarn>

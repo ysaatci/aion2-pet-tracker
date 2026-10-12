@@ -20,11 +20,11 @@ public sealed record ReleaseAsset(string Name, long Size, string Url, string? Sh
 /// <summary>
 /// Asks GitHub for the newest release of the meter (<c>/releases/latest</c> skips drafts and pre-releases) and
 /// downloads its installer, checking the size and SHA-256 GitHub reports for it. Nothing is sent but the request
-/// itself (with a "AION2DpsMeter/x.y.z" user agent).
+/// itself (with a "AION2PetTracker/x.y.z" user agent).
 /// </summary>
 public sealed class UpdateFeed : IDisposable
 {
-    public const string Repository = "cyberbadger6969/aion2-dps-meter";
+    public const string Repository = "ysaatci/aion2-pet-tracker";
     public const string LatestReleaseApi = "https://api.github.com/repos/" + Repository + "/releases/latest";
     public const string ReleasesPage = "https://github.com/" + Repository + "/releases/latest";
 

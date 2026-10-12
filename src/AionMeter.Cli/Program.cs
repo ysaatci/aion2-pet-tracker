@@ -57,7 +57,7 @@ int UpdateCheck(string[] a)
 {
     string? Opt(string name) => Array.IndexOf(a, name) is var i and >= 0 && i + 1 < a.Length ? a[i + 1] : null;
     var current = AionMeter.Core.Updates.UpdateFeed.ParseVersion(Opt("--pretend")) ?? new Version(0, 0, 0);
-    using var feed = new AionMeter.Core.Updates.UpdateFeed("AION2DpsMeter-cli/dev");
+    using var feed = new AionMeter.Core.Updates.UpdateFeed("AION2PetTracker-cli/dev");
     var latest = feed.GetLatestAsync().GetAwaiter().GetResult();
     if (latest is null)
     {
