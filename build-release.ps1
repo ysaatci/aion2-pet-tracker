@@ -34,11 +34,12 @@ $stage = Join-Path $dist $name
 New-Item -ItemType Directory -Force $dist | Out-Null
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 
-# One self-contained exe; the data folder rides inside and is unpacked next to the runtime on first start.
+# One self-contained exe. All managed code is loaded from inside it (covered by its signature); only Microsoft's
+# signed native WPF libraries are unpacked. The game data is embedded as resources (see DataFiles.cs).
 # No symbols; .NET's own messages only in English and Russian (%3B is MSBuild's escaped ";").
 dotnet publish $project -c Release -r win-x64 --self-contained true -o $stage `
     -p:DebugType=none -p:DebugSymbols=false -p:SatelliteResourceLanguages=en%3Bru `
-    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true `
+    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
     -p:EnableCompressionInSingleFile=true
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 

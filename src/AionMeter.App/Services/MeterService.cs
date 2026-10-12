@@ -70,7 +70,7 @@ public sealed class MeterService : IDisposable
         };
     }
 
-    public static string DataDirectory { get; } = Path.Combine(AppContext.BaseDirectory, "data");
+    public static string DataDirectory { get; } = DataFiles.Resolve();
 
     public AppSettings Settings { get; }
     public GameData Data { get; }
