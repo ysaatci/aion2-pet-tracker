@@ -55,7 +55,9 @@ public sealed class MeterService : IDisposable
 
         // Names and bosses learned before a restart (same zone, recent) come back immediately: no "#id" players, and a boss
         // already in view keeps its name and real max HP.
-        if (!settings.Transient && _names.Load() is { } cached)
+        // Other players' names are only kept for the DPS meter: with it off, a cache left by an earlier version goes.
+        if (!settings.Transient && !settings.ShowDpsMeter) _names.Delete();
+        else if (!settings.Transient && _names.Load() is { } cached)
         {
             Tracker.ImportCache(cached);
             Log.Info($"Restored {cached.Players.Count} cached player names, {cached.Npcs.Count} bosses");

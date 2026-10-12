@@ -36,6 +36,18 @@ public sealed class NameCache(string path)
         }
     }
 
+    /// <summary>Removes the saved state (other players' names) from disk.</summary>
+    public void Delete()
+    {
+        try
+        {
+            File.Delete(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
+    }
+
     /// <summary>The saved state, or nothing when the file is missing, unreadable or older than <see cref="MaxAge"/>.</summary>
     public SessionState? Load()
     {
