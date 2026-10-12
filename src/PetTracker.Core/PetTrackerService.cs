@@ -5,9 +5,14 @@ namespace PetTracker.Core;
 /// <param name="NearbyCount">NPCs around that drop this pet's soul; 0 for a pet kept up after its last one died.</param>
 public sealed record NearbyPet(PetInfo Pet, PetProgress Progress, int NearbyCount, IReadOnlyList<int> NpcCodes);
 
-/// <summary>What the overlay shows: nearby soul sources grouped by genus, and the last soul drop.</summary>
+/// <summary>
+/// What the overlay shows: the pet being farmed (<paramref name="Focus"/>: pinned by the player, else the one whose soul
+/// dropped last, nearby or not) and the other soul sources around, grouped by genus (the focus pet is not repeated there).
+/// </summary>
 public sealed record PetOverlaySnapshot(
     bool HasCollection,
+    NearbyPet? Focus,
+    bool FocusPinned,
     IReadOnlyDictionary<Genus, IReadOnlyList<NearbyPet>> NearbyByGenus,
     PetProgress? LastDrop,
     long TimeMs);
@@ -130,7 +135,8 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
     }
 
     /// <param name="nowMs">Wall clock (Unix ms) for expiry; defaults to the newest event's time.</param>
-    public PetOverlaySnapshot Snapshot(long? nowMs = null)
+    /// <param name="pinnedPetId">The pet the player chose to farm; null = follow the last soul drop.</param>
+    public PetOverlaySnapshot Snapshot(long? nowMs = null, int? pinnedPetId = null)
     {
         var now = Math.Max(_nowMs, nowMs ?? 0);
         _nearby.Expire(now);
@@ -148,9 +154,18 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
         foreach (var (petId, r) in _recent)
             if (!counts.ContainsKey(petId)) counts[petId] = (0, new HashSet<int>(r.Codes));
         foreach (var petId in _dismissed) counts.Remove(petId);
-        var pets = counts.Select(kv => new NearbyPet(
-                catalog.Pet(kv.Key) ?? new PetInfo(kv.Key, $"Pet {kv.Key}", Genus.Unknown, SoulThresholds.DefaultUnlock, []),
-                progress.Get(kv.Key), kv.Value.Count, kv.Value.Codes.Order().ToList()))
+
+        var focusId = pinnedPetId ?? (progress.LastSoulPetId > 0 ? progress.LastSoulPetId : null);
+        NearbyPet? focus = null;
+        if (focusId is { } fid)
+        {
+            var info = PetOf(fid);
+            focus = counts.Remove(fid, out var near)
+                ? new NearbyPet(info, progress.Get(fid), near.Count, near.Codes.Order().ToList())
+                : new NearbyPet(info, progress.Get(fid), 0, info.SourceNpcs);
+        }
+
+        var pets = counts.Select(kv => new NearbyPet(PetOf(kv.Key), progress.Get(kv.Key), kv.Value.Count, kv.Value.Codes.Order().ToList()))
             // Pets still to level first, closest to their next level on top; maxed pets last.
             .OrderBy(p => p.Progress.Needed is null)
             .ThenBy(p => (p.Progress.Needed ?? 0) - p.Progress.Souls)
@@ -158,6 +173,9 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
         var byGenus = pets.GroupBy(p => p.Pet.Genus)
             .OrderBy(g => g.Key)
             .ToDictionary(g => g.Key, g => (IReadOnlyList<NearbyPet>)g.ToList());
-        return new PetOverlaySnapshot(progress.HasSnapshot, byGenus, _lastDrop, now);
+        return new PetOverlaySnapshot(progress.HasSnapshot, focus, pinnedPetId is not null, byGenus, _lastDrop, now);
     }
+
+    private PetInfo PetOf(int petId) =>
+        catalog.Pet(petId) ?? new PetInfo(petId, $"Pet {petId}", Genus.Unknown, SoulThresholds.DefaultUnlock, []);
 }

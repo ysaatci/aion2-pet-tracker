@@ -15,6 +15,8 @@ public sealed class PetState
     /// <summary>When the login snapshot was taken (Unix ms); 0 = never.</summary>
     public long SnapshotMs { get; set; }
     public long UpdatedMs { get; set; }
+    /// <summary>The pet whose soul dropped last: what the player is farming, unless they pinned another.</summary>
+    public int LastSoulPetId { get; set; }
 }
 
 public interface IPetStateStorage
@@ -71,6 +73,7 @@ public sealed class PetProgressStore
     public bool HasSnapshot => _state.SnapshotMs > 0;
     public long SnapshotMs => _state.SnapshotMs;
     public int ActivePetId => _state.ActivePetId;
+    public int LastSoulPetId => _state.LastSoulPetId;
 
     public void ApplySnapshot(long timeMs, int activePetId, IReadOnlyDictionary<int, int> levels, IReadOnlyDictionary<int, int> souls)
     {
@@ -81,6 +84,7 @@ public sealed class PetProgressStore
             Souls = new Dictionary<int, int>(souls),
             SnapshotMs = timeMs,
             UpdatedMs = timeMs,
+            LastSoulPetId = _state.LastSoulPetId,
         };
         _storage?.Save(_state);
     }
@@ -100,6 +104,7 @@ public sealed class PetProgressStore
         if (level > 0) _state.Levels[petId] = level;
         _state.Souls[petId] = souls;
         _state.UpdatedMs = timeMs;
+        _state.LastSoulPetId = petId;
         _storage?.Save(_state);
         return Get(petId);
     }

@@ -133,6 +133,46 @@ public class PetTrackerTests
     }
 
     [Fact]
+    public void Focus_follows_the_last_soul_and_leaves_the_nearby_list()
+    {
+        var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
+        tracker.Process(Login(2, 11));
+        tracker.Process(new NpcSeenEvent(1_000, 1, VargNpc));
+        tracker.Process(new NpcSeenEvent(1_000, 2, ArmadonNpc));
+        Assert.Null(tracker.Snapshot().Focus);
+
+        tracker.Process(new PetSoulGainedEvent(2_000, Varg, 1));
+        var snap = tracker.Snapshot();
+        Assert.Equal((Varg, 12, 1, false), (snap.Focus!.Pet.Id, snap.Focus.Progress.Souls, snap.Focus.NearbyCount, snap.FocusPinned));
+        Assert.Equal([Genus.Fera], snap.NearbyByGenus.Keys);
+    }
+
+    [Fact]
+    public void A_pinned_pet_is_the_focus_even_with_none_of_its_mobs_around()
+    {
+        var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
+        tracker.Process(Login(2, 11));
+        tracker.Process(new NpcSeenEvent(1_000, 1, VargNpc));
+        tracker.Process(new PetSoulGainedEvent(2_000, Varg, 1));
+        var snap = tracker.Snapshot(pinnedPetId: Armadon);
+        Assert.Equal((Armadon, 0, true), (snap.Focus!.Pet.Id, snap.Focus.NearbyCount, snap.FocusPinned));
+        Assert.Equal([ArmadonNpc], snap.Focus.NpcCodes);
+        Assert.Equal(Varg, Assert.Single(snap.NearbyByGenus[Genus.Cogni]).Pet.Id);
+    }
+
+    [Fact]
+    public void The_last_soul_pet_is_remembered_across_a_restart_and_a_new_login()
+    {
+        var storage = new MemoryStorage();
+        var first = new PetProgressStore(Catalog(), storage);
+        first.ApplySnapshot(1_000, Armadon, new Dictionary<int, int> { [Varg] = 2 }, new Dictionary<int, int> { [Varg] = 11 });
+        first.ApplySoul(2_000, Varg, 1);
+        var second = new PetProgressStore(Catalog(), storage);
+        second.ApplySnapshot(3_000, Armadon, new Dictionary<int, int> { [Varg] = 2 }, new Dictionary<int, int> { [Varg] = 12 });
+        Assert.Equal(Varg, second.LastSoulPetId);
+    }
+
+    [Fact]
     public void A_new_map_clears_lingering_pets()
     {
         var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
