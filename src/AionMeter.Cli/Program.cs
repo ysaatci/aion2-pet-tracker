@@ -20,6 +20,7 @@ return args.FirstOrDefault() switch
     "replay" when args.Length > 1 => Replay(args[1]),
     "dump" when args.Length > 1 => Dump(args[1], args.Length > 2 ? args[2] : null),
     "find" when args.Length > 2 => Find(args[1], args[2]),
+    "findhex" when args.Length > 2 => FindHex(args[1], Convert.FromHexString(args[2].Replace(" ", ""))),
     "crits" when args.Length > 1 => Crits(args[1]),
     "entities" when args.Length > 1 => Entities(args[1]),
     "casts" when args.Length > 1 => Casts(args[1]),
@@ -39,6 +40,7 @@ int Usage()
         aionmeter-cli live [seconds] [--record]     capture live, print what was decoded
         aionmeter-cli replay <file.pcap>            run a capture through the meter, print fights
         aionmeter-cli dump <file.pcap> [opcode]     print decoded packets (opcode as hex, e.g. 0438)
+        aionmeter-cli findhex <file.pcap> <hex>     packets (and embedded bundles) containing the bytes, e.g. fa030000
         aionmeter-cli replay <file.pcap> --boss --brief   player counts per fight only
         aionmeter-cli crits <file.pcap>             damage-type / modifier statistics per class (crit check)
         aionmeter-cli entities <file.pcap>          damage dealers that are not announced players, by spawn kind
@@ -197,6 +199,39 @@ int Find(string path, string text)
     replay.RunToEnd();
     Console.WriteLine($"\n{hits} packets contain \"{text}\", {embedded} embedded bundles");
     foreach (var (op, n) in perOpcode.OrderByDescending(x => x.Value)) Console.WriteLine($"   {Opcodes.Name(op),-12} {n}");
+    return 0;
+}
+
+// Every decoded packet (bundles unpacked, embedded LZ4 bundles opened) that contains the bytes, with the bytes around them.
+int FindHex(string path, byte[] needle)
+{
+    var replay = new PcapReplaySource(data, path, realtime: false);
+    var hits = 0;
+    void Report(long t, ushort op, ReadOnlySpan<byte> body, string where)
+    {
+        for (var at = body.IndexOf(needle); at >= 0; at = body[(at + 1)..].IndexOf(needle) is var n and >= 0 ? at + 1 + n : -1)
+        {
+            if (hits++ >= 60) return;
+            var from = Math.Max(0, at - 24);
+            Console.WriteLine($"{DateTimeOffset.FromUnixTimeMilliseconds(t).ToLocalTime():HH:mm:ss.fff} {Opcodes.Name(op),-12} {where} len={body.Length,6} at={at,6}");
+            Console.WriteLine($"   {Wire.Hex(body[from..Math.Min(body.Length, at + needle.Length + 40)], 100)}");
+        }
+    }
+    replay.Pipeline.Parser.Tap = (t, op, body) =>
+    {
+        Report(t, op, body, "direct  ");
+        for (var i = 1; i + 8 < body.Length; i++)
+        {
+            if (body[i] != 0xFF || body[i + 1] != 0xFF) continue;
+            var raw = (int)Wire.U32(body, i + 2);
+            if (raw is <= 0 or > 1 << 22) continue;
+            var buf = new byte[raw];
+            var n = K4os.Compression.LZ4.LZ4Codec.Decode(body[(i + 6)..], buf);
+            if (n > 0) Report(t, op, buf.AsSpan(0, n), $"bundle@{i}");
+        }
+    };
+    replay.RunToEnd();
+    Console.WriteLine($"\n{hits} hits");
     return 0;
 }
 
