@@ -44,6 +44,6 @@ public sealed class PetService
 
     public PetOverlaySnapshot Snapshot()
     {
-        lock (_gate) return _tracker.Snapshot();
+        lock (_gate) return _tracker.Snapshot(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
     }
 }

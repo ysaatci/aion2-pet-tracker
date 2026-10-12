@@ -97,13 +97,17 @@ public partial class PetOverlayWindow : Window
         var pr = p.Progress;
         var names = string.Join(", ", p.NpcCodes.Select(_meter.Data.NpcName).Distinct());
         var tip = string.Format(T.PetsNearbyTip, p.NearbyCount, names);
-        if (!known) return new Line("", p.Pet.Name, $"×{p.NearbyCount}", "", "?", 0, accent, (Brush)FindResource("Text"), tip);
+        // Kept up after its last source died: dimmed, until more come into view or it times out.
+        var gone = p.NearbyCount == 0;
+        var count = gone ? "×0" : $"×{p.NearbyCount}";
+        Brush NameBrush(string key) => (Brush)FindResource(gone ? "TextMute" : key);
+        if (!known) return new Line("", p.Pet.Name, count, "", "?", 0, accent, NameBrush("Text"), tip);
         if (pr.Needed is not { } needed)
-            return new Line("", p.Pet.Name, $"×{p.NearbyCount}", T.PetsMax, "", BarWidth, accent, (Brush)FindResource("TextMute"), tip);
+            return new Line("", p.Pet.Name, count, T.PetsMax, "", BarWidth, accent, (Brush)FindResource("TextMute"), tip);
         var level = pr.Level == 0 ? T.PetsNew : $"Lv{pr.Level}";
         var fill = BarWidth * Math.Clamp(pr.Souls / (double)needed, 0, 1);
-        return new Line("", p.Pet.Name, $"×{p.NearbyCount}", level, $"{pr.Souls}/{needed}", fill, accent,
-            pr.Level == 0 ? (Brush)FindResource("GoldBright") : (Brush)FindResource("Text"), tip);
+        return new Line("", p.Pet.Name, count, level, $"{pr.Souls}/{needed}", fill, accent,
+            NameBrush(pr.Level == 0 ? "GoldBright" : "Text"), tip);
     }
 
     // ------------------------------------------------------------ options

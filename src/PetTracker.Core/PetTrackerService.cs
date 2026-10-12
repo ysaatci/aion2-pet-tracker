@@ -2,7 +2,7 @@ using AionMeter.Core.Events;
 
 namespace PetTracker.Core;
 
-/// <param name="NearbyCount">NPCs around that drop this pet's soul.</param>
+/// <param name="NearbyCount">NPCs around that drop this pet's soul; 0 for a pet kept up after its last one died.</param>
 public sealed record NearbyPet(PetInfo Pet, PetProgress Progress, int NearbyCount, IReadOnlyList<int> NpcCodes);
 
 /// <summary>What the overlay shows: nearby soul sources grouped by genus, and the last soul drop.</summary>
@@ -23,6 +23,11 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
     private uint _selfId;
     private readonly Dictionary<uint, long> _deaths = new();
     private long _nowMs;
+    // Pets whose source died or whose soul dropped lately: they stay listed for LingerMs after the last one is gone.
+    private readonly Dictionary<int, (long TimeMs, HashSet<int> Codes)> _recent = new();
+
+    /// <summary>How long a pet stays listed after its last nearby source died or its soul dropped.</summary>
+    public const long LingerMs = 300_000;
 
     public SoulSourceLearner Learner { get; } = new(catalog);
     public PetCatalog Catalog => catalog;
@@ -44,6 +49,7 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
             case PetSoulGainedEvent s:
                 Learner.SoulDropped(s.TimeMs, s.PetId);
                 _lastDrop = progress.ApplySoul(s.TimeMs, s.PetId, s.Souls) ?? _lastDrop;
+                Remember(s.PetId, s.TimeMs, null);
                 break;
             case NpcSeenEvent n:
                 _nearby.Seen(n.TimeMs, n.ActorId, n.NpcCode, n.X, n.Y, n.Z);
@@ -62,13 +68,16 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
                 // An entity never seen spawning may still be the kill behind a soul: it makes the window ambiguous.
                 if (!d.AlreadyDead && d.ActorId != _selfId) Learner.NpcDied(d.TimeMs, died ?? SoulSourceLearner.UnknownNpc);
                 changed = died is { } code && catalog.PetsDroppedBy(code).Count > 0;
+                if (changed && !d.AlreadyDead)
+                    foreach (var petId in catalog.PetsDroppedBy(died!.Value)) Remember(petId, d.TimeMs, died.Value);
                 break;
             case SelfIdentifiedEvent self:
                 _selfId = self.ActorId;
                 changed = false;
                 break;
-            case ZoneChangedEvent:
+            case ZoneChangedEvent z:
                 _nearby.Clear();
+                if (!z.IsTeleport) _recent.Clear(); // another map: the last one's pets are no longer "around"
                 break;
             case NpcHpEvent h:
                 _nearby.Touch(h.TimeMs, h.ActorId);
@@ -86,15 +95,25 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
         if (changed) Changed?.Invoke();
     }
 
+    private void Remember(int petId, long timeMs, int? npcCode)
+    {
+        var codes = _recent.TryGetValue(petId, out var r) ? r.Codes : new HashSet<int>();
+        if (npcCode is { } code) codes.Add(code);
+        _recent[petId] = (timeMs, codes);
+    }
+
     private void PruneDeaths(long nowMs)
     {
         foreach (var id in _deaths.Where(kv => nowMs - kv.Value > SoulSourceLearner.WindowMs).Select(kv => kv.Key).ToList())
             _deaths.Remove(id);
     }
 
-    public PetOverlaySnapshot Snapshot()
+    /// <param name="nowMs">Wall clock (Unix ms) for expiry; defaults to the newest event's time.</param>
+    public PetOverlaySnapshot Snapshot(long? nowMs = null)
     {
-        _nearby.Expire(_nowMs);
+        var now = Math.Max(_nowMs, nowMs ?? 0);
+        _nearby.Expire(now);
+        foreach (var id in _recent.Where(kv => now - kv.Value.TimeMs > LingerMs).Select(kv => kv.Key).ToList()) _recent.Remove(id);
         var counts = new Dictionary<int, (int Count, HashSet<int> Codes)>();
         foreach (var npc in _nearby.Npcs)
         {
@@ -105,6 +124,8 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
                 counts[petId] = (c.Count + 1, c.Codes);
             }
         }
+        foreach (var (petId, r) in _recent)
+            if (!counts.ContainsKey(petId)) counts[petId] = (0, new HashSet<int>(r.Codes));
         var pets = counts.Select(kv => new NearbyPet(
                 catalog.Pet(kv.Key) ?? new PetInfo(kv.Key, $"Pet {kv.Key}", Genus.Unknown, SoulThresholds.DefaultUnlock, []),
                 progress.Get(kv.Key), kv.Value.Count, kv.Value.Codes.Order().ToList()))
@@ -115,6 +136,6 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
         var byGenus = pets.GroupBy(p => p.Pet.Genus)
             .OrderBy(g => g.Key)
             .ToDictionary(g => g.Key, g => (IReadOnlyList<NearbyPet>)g.ToList());
-        return new PetOverlaySnapshot(progress.HasSnapshot, byGenus, _lastDrop, _nowMs);
+        return new PetOverlaySnapshot(progress.HasSnapshot, byGenus, _lastDrop, now);
     }
 }

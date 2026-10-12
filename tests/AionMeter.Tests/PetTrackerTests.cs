@@ -89,14 +89,33 @@ public class PetTrackerTests
     }
 
     [Fact]
-    public void Dead_and_departed_npcs_leave_the_list()
+    public void A_killed_source_keeps_its_pet_listed_for_a_while()
     {
         var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
         tracker.Process(new NpcSeenEvent(1_000, 1, VargNpc));
-        tracker.Process(new NpcSeenEvent(1_000, 2, ArmadonNpc));
         tracker.Process(new DeathEvent(2_000, 1));
-        Assert.False(tracker.Snapshot().NearbyByGenus.ContainsKey(Genus.Cogni));
-        tracker.Process(new NpcHpEvent(1_000 + NearbyNpcTracker.StaleMs + 10, 99, 1, 1));
+        var kept = Assert.Single(tracker.Snapshot(2_000 + PetTrackerService.LingerMs - 1).NearbyByGenus[Genus.Cogni]);
+        Assert.Equal(0, kept.NearbyCount);
+        Assert.Equal([VargNpc], kept.NpcCodes);
+        Assert.Empty(tracker.Snapshot(2_000 + PetTrackerService.LingerMs + 1).NearbyByGenus);
+    }
+
+    [Fact]
+    public void Departed_npcs_leave_the_list_without_lingering()
+    {
+        var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
+        tracker.Process(new NpcSeenEvent(1_000, 2, ArmadonNpc));
+        Assert.Single(tracker.Snapshot().NearbyByGenus);
+        Assert.Empty(tracker.Snapshot(1_000 + NearbyNpcTracker.StaleMs + 10).NearbyByGenus);
+    }
+
+    [Fact]
+    public void A_new_map_clears_lingering_pets()
+    {
+        var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
+        tracker.Process(new NpcSeenEvent(1_000, 1, VargNpc));
+        tracker.Process(new DeathEvent(2_000, 1));
+        tracker.Process(new ZoneChangedEvent(3_000, 2100, "Elsewhere", false));
         Assert.Empty(tracker.Snapshot().NearbyByGenus);
     }
 
