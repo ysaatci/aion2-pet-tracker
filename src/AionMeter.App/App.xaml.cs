@@ -109,7 +109,8 @@ public partial class App : Application
         _meter.StartCapture();
 
         _overlay = new OverlayWindow(_meter);
-        if (settings.OverlayVisible || e.Args.Contains("--show")) _overlay.Show(); // --show: this run only, not saved
+        if (!settings.ShowDpsMeter) new WindowInteropHelper(_overlay).EnsureHandle(); // hotkeys hang off its handle
+        else if (settings.OverlayVisible || e.Args.Contains("--show")) _overlay.Show(); // --show: this run only, not saved
         else
         {
             new WindowInteropHelper(_overlay).EnsureHandle();
@@ -122,7 +123,7 @@ public partial class App : Application
         if (settings.PetOverlayVisible) SetPetsVisible(true);
 
         _tray = new TrayIcon(new TrayActions(
-            ToggleOverlay: () => SetOverlayVisible(!_overlay.IsVisible),
+            ToggleOverlay: ToggleMainOverlay,
             ToggleClickThrough: ToggleClickThrough,
             Reset: RestartMeter,
             History: ShowHistory,
@@ -148,7 +149,11 @@ public partial class App : Application
         // Another start of the app asks this one to show the overlay.
         _showRequest = new EventWaitHandle(false, EventResetMode.AutoReset, ShowRequestName);
         _showWait = ThreadPool.RegisterWaitForSingleObject(_showRequest,
-            (_, _) => Dispatcher.BeginInvoke(() => SetOverlayVisible(true)), null, Timeout.Infinite, executeOnlyOnce: false);
+            (_, _) => Dispatcher.BeginInvoke(() =>
+            {
+                if (_meter.Settings.ShowDpsMeter) SetOverlayVisible(true);
+                else SetPetsVisible(true);
+            }), null, Timeout.Infinite, executeOnlyOnce: false);
 
         // New versions on GitHub: tray item, the overlay's update button and one notification per version.
         _meter.Updates.Changed += OnUpdatesChanged;
@@ -209,7 +214,7 @@ public partial class App : Application
         _pets?.Refresh();
         if (++_ticks % 5 == 0)
         {
-            _tray?.Update(_overlay.IsVisible, _meter.Settings.ClickThrough, _meter.DemoRunning ? "demo" : _meter.CaptureStatus.Message);
+            _tray?.Update(_meter.Settings.ShowDpsMeter ? _overlay.IsVisible : _pets is not null,_meter.Settings.ClickThrough, _meter.DemoRunning ? "demo" : _meter.CaptureStatus.Message);
             CheckBossAlerts();
             CheckGameStart();
             CheckPendingUpdate();
@@ -233,7 +238,7 @@ public partial class App : Application
         var engaged = fight is { } f && (f.Boss || f.Self);
         var now = Environment.TickCount64;
         if (engaged) _lastEngagedTick = now;
-        if (!s.AutoShow) return;
+        if (!s.AutoShow || !s.ShowDpsMeter) return;
 
         if (engaged && !_overlay.IsVisible && fight!.Value.Id != _suppressedFight)
         {
@@ -251,7 +256,7 @@ public partial class App : Application
     /// <summary>Up without the user asking: goes away again after the usual idle time (Settings → Overlay).</summary>
     private void ShowByItself()
     {
-        if (_overlay.IsVisible) return;
+        if (_overlay.IsVisible || !_meter.Settings.ShowDpsMeter) return;
         _overlay.Show();
         _autoShown = true;
         _lastEngagedTick = Environment.TickCount64;
@@ -287,6 +292,13 @@ public partial class App : Application
         _hotkeys.Register(s.HotkeyClickThrough, ToggleClickThrough);
         _hotkeys.Register(s.HotkeyTimers, ToggleBossTimers);
         _hotkeys.Register(s.HotkeyPets, () => SetPetsVisible(_pets is null));
+    }
+
+    /// <summary>Tray click / "show overlay": the DPS overlay, or the pet overlay while the DPS meter is switched off.</summary>
+    private void ToggleMainOverlay()
+    {
+        if (_meter.Settings.ShowDpsMeter) SetOverlayVisible(!_overlay.IsVisible);
+        else SetPetsVisible(_pets is null);
     }
 
     /// <summary>The nearby pets overlay: hotkey, tray item and its own menu; remembered across starts.</summary>

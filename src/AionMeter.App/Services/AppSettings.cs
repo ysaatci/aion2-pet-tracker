@@ -41,8 +41,14 @@ public sealed class AppSettings
     /// <summary>Bring the overlay up when the meter starts and when it finds the game, so a player sees it is running.</summary>
     public bool ShowOnStart { get; set; } = true;
 
+    /// <summary>
+    /// False (pet tracker build): the DPS overlay never comes up by itself (start, game start, fights); the tray and a
+    /// second launch bring up the pet overlay instead. Its hotkey still opens it by hand.
+    /// </summary>
+    public bool ShowDpsMeter { get; set; }
+
     // Pet overlay (nearby soul sources)
-    public bool PetOverlayVisible { get; set; }
+    public bool PetOverlayVisible { get; set; } = true;
     public double PetOverlayLeft { get; set; } = 80;
     public double PetOverlayTop { get; set; } = 520;
     public static readonly int[] PetSizes = [80, 100, 125, 150];

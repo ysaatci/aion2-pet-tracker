@@ -85,6 +85,9 @@ public sealed class UiText
 
     // ---------------------------------------------------------------- pets (English only so far)
     public string PetsTitle { get; init; } = "Nearby pets";
+    public string ShowDpsMeter { get; init; } = "Show the DPS meter";
+    public string ShowDpsMeterHint { get; init; } =
+        "Off: only the pet overlay shows; the DPS overlay never comes up by itself (its hotkey still opens it).";
     public string HkPets { get; init; } = "Nearby pets";
     public string TrayPets { get; init; } = "Nearby pets";
     public string PetsNoneNearby { get; init; } = "No pet soul mobs nearby";
