@@ -1,0 +1,2236 @@
+{
+    "_source":  "MetaBot.GG AION 2 mounts, https://metabot.gg/en/aion-2/mounts",
+    "_built":  "2026-10-12",
+    "pets":  {
+                 "1047":  {
+                              "name":  "Aberrant Armadon",
+                              "slug":  "aberrant-armadon",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100453,
+                                           2100751
+                                       ]
+                          },
+                 "1118":  {
+                              "name":  "Aberrant Bee",
+                              "slug":  "aberrant-bee",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2000955,
+                                           2100286,
+                                           2100550,
+                                           2400900,
+                                           2400930
+                                       ]
+                          },
+                 "1119":  {
+                              "name":  "Aberrant Coradon",
+                              "slug":  "aberrant-coradon",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2000952,
+                                           2100699,
+                                           2100821,
+                                           2100828,
+                                           2400907
+                                       ]
+                          },
+                 "1021":  {
+                              "name":  "Aberrant Odyle Spider",
+                              "slug":  "aberrant-odyle-spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1053":  {
+                              "name":  "Aberrant Potcrab",
+                              "slug":  "aberrant-potcrab",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100908,
+                                           2110512
+                                       ]
+                          },
+                 "1089":  {
+                              "name":  "Aberrant Skama",
+                              "slug":  "aberrant-skama",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100710,
+                                           2600024,
+                                           2600424,
+                                           2600535,
+                                           2600555
+                                       ]
+                          },
+                 "1126":  {
+                              "name":  "Aberrant Tog",
+                              "slug":  "aberrant-tog",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100006,
+                                           2100145,
+                                           2100288,
+                                           2100793,
+                                           2100819,
+                                           2400936
+                                       ]
+                          },
+                 "1125":  {
+                              "name":  "Aberrant Zaif",
+                              "slug":  "aberrant-zaif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100558,
+                                           2400578
+                                       ]
+                          },
+                 "1038":  {
+                              "name":  "Airon",
+                              "slug":  "airon",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100144,
+                                           2100216,
+                                           2100609,
+                                           2100741,
+                                           2400567,
+                                           2400568
+                                       ]
+                          },
+                 "1046":  {
+                              "name":  "Armadon",
+                              "slug":  "armadon",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400002,
+                                           2400249
+                                       ]
+                          },
+                 "1198":  {
+                              "name":  "Ashen Basilisk",
+                              "slug":  "ashen-basilisk",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1132":  {
+                              "name":  "Ashen Lupyllini",
+                              "slug":  "ashen-lupyllini",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1114":  {
+                              "name":  "Ashen Spider",
+                              "slug":  "ashen-spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100283,
+                                           2400230
+                                       ]
+                          },
+                 "1008":  {
+                              "name":  "Baby Odyle Spider",
+                              "slug":  "baby-odyle-spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100034
+                                       ]
+                          },
+                 "1163":  {
+                              "name":  "Basilisk",
+                              "slug":  "basilisk",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400240
+                                       ]
+                          },
+                 "1181":  {
+                              "name":  "Brax",
+                              "slug":  "brax",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2000954,
+                                           2100217,
+                                           2100303,
+                                           2100740,
+                                           2400375,
+                                           2400914
+                                       ]
+                          },
+                 "1071":  {
+                              "name":  "Cadaver Insectoid",
+                              "slug":  "cadaver-insectoid",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400018
+                                       ]
+                          },
+                 "1041":  {
+                              "name":  "Cave Bat",
+                              "slug":  "cave-bat",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100911
+                                       ]
+                          },
+                 "1057":  {
+                              "name":  "Coradon",
+                              "slug":  "coradon",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1022":  {
+                              "name":  "Crasaur",
+                              "slug":  "crasaur",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100215,
+                                           2100608,
+                                           2101083,
+                                           2400327,
+                                           2400809
+                                       ]
+                          },
+                 "1039":  {
+                              "name":  "Crestlich",
+                              "slug":  "crestlich",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100037,
+                                           2100150,
+                                           2100799
+                                       ]
+                          },
+                 "1014":  {
+                              "name":  "Drakan Guard Dog",
+                              "slug":  "drakan-guard-dog",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101002,
+                                           2101009,
+                                           2400359,
+                                           2400587,
+                                           2400655,
+                                           2600052
+                                       ]
+                          },
+                 "1099":  {
+                              "name":  "Elite Karnif",
+                              "slug":  "elite-karnif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2406071
+                                       ]
+                          },
+                 "1032":  {
+                              "name":  "Elite Keneire",
+                              "slug":  "elite-keneire",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1043":  {
+                              "name":  "Elite Ursus",
+                              "slug":  "elite-ursus",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1134":  {
+                              "name":  "Eternal Coradon",
+                              "slug":  "eternal-coradon",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400941,
+                                           2600061,
+                                           2600461
+                                       ]
+                          },
+                 "1199":  {
+                              "name":  "Flame Barghest",
+                              "slug":  "flame-barghest",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1004":  {
+                              "name":  "Fossa",
+                              "slug":  "fossa",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100163,
+                                           2400254,
+                                           2400414
+                                       ]
+                          },
+                 "1059":  {
+                              "name":  "Giant Bee",
+                              "slug":  "giant-bee",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100551
+                                       ]
+                          },
+                 "1034":  {
+                              "name":  "Giant Sparkie",
+                              "slug":  "giant-sparkie",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100015,
+                                           2100796,
+                                           2100987,
+                                           2100993,
+                                           2400341,
+                                           2400466
+                                       ]
+                          },
+                 "1055":  {
+                              "name":  "Grave Rat",
+                              "slug":  "grave-rat",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1015":  {
+                              "name":  "Kailin",
+                              "slug":  "kailin",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101021,
+                                           2400736,
+                                           2400905,
+                                           2400934
+                                       ]
+                          },
+                 "1097":  {
+                              "name":  "Karnif",
+                              "slug":  "karnif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100174,
+                                           2100348,
+                                           2100349,
+                                           2100742,
+                                           2100752,
+                                           2100802,
+                                           2100805
+                                       ]
+                          },
+                 "1009":  {
+                              "name":  "Kernon",
+                              "slug":  "kernon",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1036":  {
+                              "name":  "Lupyllini",
+                              "slug":  "lupyllini",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100746
+                                       ]
+                          },
+                 "1037":  {
+                              "name":  "Male Crestlich",
+                              "slug":  "male-crestlich",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100151,
+                                           2100750
+                                       ]
+                          },
+                 "1098":  {
+                              "name":  "Modified Karnif",
+                              "slug":  "modified-karnif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100096,
+                                           2100130,
+                                           2600004,
+                                           2600014,
+                                           2600404,
+                                           2600414,
+                                           2600482,
+                                           2600492
+                                       ]
+                          },
+                 "1025":  {
+                              "name":  "Mutated Aberrant Odyle Spider",
+                              "slug":  "mutated-aberrant-odyle-spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100030,
+                                           2100663,
+                                           2100745,
+                                           2400744
+                                       ]
+                          },
+                 "1130":  {
+                              "name":  "Mutated Cadaver Insectoid",
+                              "slug":  "mutated-cadaver-insectoid",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100554
+                                       ]
+                          },
+                 "1145":  {
+                              "name":  "Mutated Insectoid Valka",
+                              "slug":  "mutated-insectoid-valka",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1143":  {
+                              "name":  "Mutated Ursus",
+                              "slug":  "mutated-ursus",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400217
+                                       ]
+                          },
+                 "1066":  {
+                              "name":  "Papis",
+                              "slug":  "papis",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2000926,
+                                           2000929,
+                                           2100009,
+                                           2100220,
+                                           2100654,
+                                           2400594,
+                                           2400903,
+                                           2400940
+                                       ]
+                          },
+                 "1007":  {
+                              "name":  "Potcrab",
+                              "slug":  "potcrab",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100032,
+                                           2100610,
+                                           2101098,
+                                           2400363,
+                                           2400755,
+                                           2400812
+                                       ]
+                          },
+                 "1067":  {
+                              "name":  "Scorpion",
+                              "slug":  "scorpion",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100709,
+                                           2400470
+                                       ]
+                          },
+                 "1035":  {
+                              "name":  "Skama",
+                              "slug":  "skama",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100031,
+                                           2100376,
+                                           2100907
+                                       ]
+                          },
+                 "1011":  {
+                              "name":  "Skyray",
+                              "slug":  "skyray",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100047,
+                                           2100182,
+                                           2100556,
+                                           2100832,
+                                           2101124,
+                                           2101132,
+                                           2400163,
+                                           2400945
+                                       ]
+                          },
+                 "1016":  {
+                              "name":  "Slink",
+                              "slug":  "slink",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100165,
+                                           2100188,
+                                           2101097,
+                                           2400819,
+                                           2600048,
+                                           2600448,
+                                           2600576,
+                                           2600586
+                                       ]
+                          },
+                 "1006":  {
+                              "name":  "Sparkie",
+                              "slug":  "sparkie",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100273,
+                                           2100305,
+                                           2100753,
+                                           2100795,
+                                           2100986,
+                                           2100992
+                                       ]
+                          },
+                 "1083":  {
+                              "name":  "Spider",
+                              "slug":  "spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2600046,
+                                           2600446,
+                                           2600578,
+                                           2600588
+                                       ]
+                          },
+                 "1060":  {
+                              "name":  "Starturtle",
+                              "slug":  "starturtle",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100033,
+                                           2100808,
+                                           2101082,
+                                           2400374,
+                                           2400519,
+                                           2400808
+                                       ]
+                          },
+                 "1045":  {
+                              "name":  "Sylphen",
+                              "slug":  "sylphen",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100004,
+                                           2100023,
+                                           2100219,
+                                           2100472,
+                                           2100565,
+                                           2100743,
+                                           2400362
+                                       ]
+                          },
+                 "1203":  {
+                              "name":  "Tamed Karnif",
+                              "slug":  "tamed-karnif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400257,
+                                           2400503
+                                       ]
+                          },
+                 "1189":  {
+                              "name":  "Tamed Zaif",
+                              "slug":  "tamed-zaif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100566,
+                                           2600102,
+                                           2600132,
+                                           2600452,
+                                           2600579,
+                                           2600589
+                                       ]
+                          },
+                 "1106":  {
+                              "name":  "Tayga",
+                              "slug":  "tayga",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400564,
+                                           2400583,
+                                           2400611
+                                       ]
+                          },
+                 "1072":  {
+                              "name":  "Tog",
+                              "slug":  "tog",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400912
+                                       ]
+                          },
+                 "1117":  {
+                              "name":  "Unstable Spider",
+                              "slug":  "unstable-spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101023,
+                                           2110509,
+                                           2400319,
+                                           2400745,
+                                           2600045
+                                       ]
+                          },
+                 "1042":  {
+                              "name":  "Ursus",
+                              "slug":  "ursus",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100172,
+                                           2100552,
+                                           2100560,
+                                           2100655,
+                                           2100817,
+                                           2400376,
+                                           2400916
+                                       ]
+                          },
+                 "1158":  {
+                              "name":  "Venomous Insect Sram",
+                              "slug":  "venomous-insect-sram",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1188":  {
+                              "name":  "Vivel",
+                              "slug":  "vivel",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100583,
+                                           2400057
+                                       ]
+                          },
+                 "1116":  {
+                              "name":  "Withered Branch Spider",
+                              "slug":  "withered-branch-spider",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2000956,
+                                           2000957,
+                                           2400902,
+                                           2400933,
+                                           2400939,
+                                           2400946,
+                                           2400948
+                                       ]
+                          },
+                 "1120":  {
+                              "name":  "Young Kailin",
+                              "slug":  "young-kailin",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101022,
+                                           2400737,
+                                           2400906,
+                                           2400935
+                                       ]
+                          },
+                 "1121":  {
+                              "name":  "Young Slink",
+                              "slug":  "young-slink",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100189,
+                                           2100473,
+                                           2400910,
+                                           2400950,
+                                           2600047,
+                                           2600447
+                                       ]
+                          },
+                 "1122":  {
+                              "name":  "Young Tog",
+                              "slug":  "young-tog",
+                              "genus":  "Fera",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1123":  {
+                              "name":  "Young Ursus",
+                              "slug":  "young-ursus",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100173,
+                                           2100818,
+                                           2400377,
+                                           2400917
+                                       ]
+                          },
+                 "1124":  {
+                              "name":  "Zaif",
+                              "slug":  "zaif",
+                              "genus":  "Fera",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100573,
+                                           2100748,
+                                           2100797,
+                                           2100813
+                                       ]
+                          },
+                 "1207":  {
+                              "name":  "Agrint",
+                              "slug":  "agrint",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100143,
+                                           2100698,
+                                           2100714,
+                                           2400221,
+                                           2400415,
+                                           2400825,
+                                           2600071,
+                                           2600571
+                                       ]
+                          },
+                 "1177":  {
+                              "name":  "Ancient Spirit",
+                              "slug":  "ancient-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1208":  {
+                              "name":  "Ashen Agrint",
+                              "slug":  "ashen-agrint",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400750
+                                       ]
+                          },
+                 "1135":  {
+                              "name":  "Ashen Dionae",
+                              "slug":  "ashen-dionae",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400248
+                                       ]
+                          },
+                 "1058":  {
+                              "name":  "Black Smoke Murute",
+                              "slug":  "black-smoke-murute",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1214":  {
+                              "name":  "Black Spirit",
+                              "slug":  "black-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100460,
+                                           2100807,
+                                           2400708,
+                                           2600069,
+                                           2600469
+                                       ]
+                          },
+                 "1081":  {
+                              "name":  "Dionae",
+                              "slug":  "dionae",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1131":  {
+                              "name":  "Drana Spore",
+                              "slug":  "drana-spore",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2110502
+                                       ]
+                          },
+                 "1102":  {
+                              "name":  "Dried Up Forest Guardian",
+                              "slug":  "dried-up-forest-guardian",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1210":  {
+                              "name":  "Dry Leaf Agrint",
+                              "slug":  "dry-leaf-agrint",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100179,
+                                           2600113,
+                                           2600143
+                                       ]
+                          },
+                 "1190":  {
+                              "name":  "Elite Poisonous Spore Fungen",
+                              "slug":  "elite-poisonous-spore-fungen",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1133":  {
+                              "name":  "Forest Dionae",
+                              "slug":  "forest-dionae",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1101":  {
+                              "name":  "Forest Guardian",
+                              "slug":  "forest-guardian",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100660,
+                                           2600103,
+                                           2600133,
+                                           2600454
+                                       ]
+                          },
+                 "1003":  {
+                              "name":  "Forest Specter",
+                              "slug":  "forest-specter",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100601,
+                                           2100662
+                                       ]
+                          },
+                 "1048":  {
+                              "name":  "Forest Spirit",
+                              "slug":  "forest-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100022,
+                                           2100142,
+                                           2100555,
+                                           2100611,
+                                           2400337
+                                       ]
+                          },
+                 "1086":  {
+                              "name":  "Fungen",
+                              "slug":  "fungen",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100456
+                                       ]
+                          },
+                 "1012":  {
+                              "name":  "Fungie",
+                              "slug":  "fungie",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100041
+                                       ]
+                          },
+                 "1050":  {
+                              "name":  "Gravi",
+                              "slug":  "gravi",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100650,
+                                           2101125,
+                                           2400307
+                                       ]
+                          },
+                 "1165":  {
+                              "name":  "Intermediate Earth Spirit",
+                              "slug":  "intermediate-earth-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100653,
+                                           2101102,
+                                           2400823
+                                       ]
+                          },
+                 "1187":  {
+                              "name":  "Intermediate Fire Spirit",
+                              "slug":  "intermediate-fire-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101100,
+                                           2400748,
+                                           2400821
+                                       ]
+                          },
+                 "1169":  {
+                              "name":  "Intermediate Water Spirit",
+                              "slug":  "intermediate-water-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100657,
+                                           2101101,
+                                           2400738,
+                                           2400822
+                                       ]
+                          },
+                 "1094":  {
+                              "name":  "Intermediate Wind Spirit",
+                              "slug":  "intermediate-wind-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100658,
+                                           2101103,
+                                           2400824
+                                       ]
+                          },
+                 "1031":  {
+                              "name":  "Konutin Worker",
+                              "slug":  "konutin-worker",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100157
+                                       ]
+                          },
+                 "1052":  {
+                              "name":  "Large Leaf Gravi",
+                              "slug":  "large-leaf-gravi",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100285,
+                                           2100651,
+                                           2400342
+                                       ]
+                          },
+                 "1164":  {
+                              "name":  "Lesser Earth Spirit",
+                              "slug":  "lesser-earth-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101089
+                                       ]
+                          },
+                 "1213":  {
+                              "name":  "Lesser Fire Spirit",
+                              "slug":  "lesser-fire-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101087,
+                                           2400325
+                                       ]
+                          },
+                 "1168":  {
+                              "name":  "Lesser Water Spirit",
+                              "slug":  "lesser-water-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100231,
+                                           2101088
+                                       ]
+                          },
+                 "1092":  {
+                              "name":  "Lesser Wind Spirit",
+                              "slug":  "lesser-wind-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100605,
+                                           2101096,
+                                           2400324
+                                       ]
+                          },
+                 "1051":  {
+                              "name":  "Magic Gravi",
+                              "slug":  "magic-gravi",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100659,
+                                           2101126,
+                                           2400329,
+                                           2400731
+                                       ]
+                          },
+                 "1144":  {
+                              "name":  "Mutated Forest Guardian",
+                              "slug":  "mutated-forest-guardian",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400214,
+                                           2400751
+                                       ]
+                          },
+                 "1049":  {
+                              "name":  "Mutated Forest Spirit",
+                              "slug":  "mutated-forest-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100711,
+                                           2100715,
+                                           2400061
+                                       ]
+                          },
+                 "1073":  {
+                              "name":  "Nepenthes",
+                              "slug":  "nepenthes",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100160,
+                                           2100744,
+                                           2600049,
+                                           2600449,
+                                           2600511
+                                       ]
+                          },
+                 "1127":  {
+                              "name":  "Odyle Stone Spirit",
+                              "slug":  "odyle-stone-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400734
+                                       ]
+                          },
+                 "1136":  {
+                              "name":  "Rafflesia",
+                              "slug":  "rafflesia",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2000925,
+                                           2110513,
+                                           2400056,
+                                           2400735,
+                                           2400813,
+                                           2400949
+                                       ]
+                          },
+                 "1091":  {
+                              "name":  "Red Spark Ignus",
+                              "slug":  "red-spark-ignus",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1178":  {
+                              "name":  "Spirit King\u0027s Bodyguard Warrior",
+                              "slug":  "spirit-kings-bodyguard-warrior",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2600066,
+                                           2600466
+                                       ]
+                          },
+                 "1069":  {
+                              "name":  "Stone Spirit",
+                              "slug":  "stone-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100812,
+                                           2400301,
+                                           2600056,
+                                           2600118,
+                                           2600148
+                                       ]
+                          },
+                 "1166":  {
+                              "name":  "Superior Earth Spirit",
+                              "slug":  "superior-earth-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100667,
+                                           2400310,
+                                           2400817
+                                       ]
+                          },
+                 "1096":  {
+                              "name":  "Superior Fire Spirit",
+                              "slug":  "superior-fire-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100664,
+                                           2400303,
+                                           2400749,
+                                           2400815
+                                       ]
+                          },
+                 "1155":  {
+                              "name":  "Superior Water Spirit",
+                              "slug":  "superior-water-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100665,
+                                           2400306,
+                                           2400739,
+                                           2400816
+                                       ]
+                          },
+                 "1095":  {
+                              "name":  "Superior Wind Spirit",
+                              "slug":  "superior-wind-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100666,
+                                           2400302,
+                                           2400818
+                                       ]
+                          },
+                 "1209":  {
+                              "name":  "Thin Agrint",
+                              "slug":  "thin-agrint",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2110508,
+                                           2400054,
+                                           2600028,
+                                           2600428,
+                                           2600503,
+                                           2600531,
+                                           2600551
+                                       ]
+                          },
+                 "1100":  {
+                              "name":  "Ultimate Earth Spirit",
+                              "slug":  "ultimate-earth-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1082":  {
+                              "name":  "Ultimate Fire Spirit",
+                              "slug":  "ultimate-fire-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1090":  {
+                              "name":  "Ultimate Water Spirit",
+                              "slug":  "ultimate-water-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1079":  {
+                              "name":  "Ultimate Wind Spirit",
+                              "slug":  "ultimate-wind-spirit",
+                              "genus":  "Natura",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1027":  {
+                              "name":  "Withered Agrint",
+                              "slug":  "withered-agrint",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100612,
+                                           2100652,
+                                           2600026
+                                       ]
+                          },
+                 "1219":  {
+                              "name":  "Zelophi",
+                              "slug":  "zelophi",
+                              "genus":  "Natura",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100458,
+                                           2101085,
+                                           2400811,
+                                           2600050,
+                                           2600450,
+                                           2600512,
+                                           2600574,
+                                           2600584
+                                       ]
+                          },
+                 "1110":  {
+                              "name":  "Blue Kalgolem",
+                              "slug":  "blue-kalgolem",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100454,
+                                           2400471,
+                                           2600051,
+                                           2600451,
+                                           2600513,
+                                           2600575,
+                                           2600585
+                                       ]
+                          },
+                 "1157":  {
+                              "name":  "Cadaver Cleaner",
+                              "slug":  "cadaver-cleaner",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400275,
+                                           2400412,
+                                           2400418
+                                       ]
+                          },
+                 "1217":  {
+                              "name":  "Congealed Drana",
+                              "slug":  "congealed-drana",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400009
+                                       ]
+                          },
+                 "1062":  {
+                              "name":  "Contaminated Slime",
+                              "slug":  "contaminated-slime",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100025,
+                                           2100717,
+                                           2600023,
+                                           2600423,
+                                           2600539,
+                                           2600559
+                                       ]
+                          },
+                 "1216":  {
+                              "name":  "Dark Spirit",
+                              "slug":  "dark-spirit",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100600,
+                                           2100656
+                                       ]
+                          },
+                 "1142":  {
+                              "name":  "Distorted Mutant",
+                              "slug":  "distorted-mutant",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400312
+                                       ]
+                          },
+                 "1056":  {
+                              "name":  "Drakan Probe",
+                              "slug":  "drakan-probe",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100866,
+                                           2101014,
+                                           2400143,
+                                           2400162,
+                                           2400382,
+                                           2400658
+                                       ]
+                          },
+                 "1148":  {
+                              "name":  "Drakana Kalgolem",
+                              "slug":  "drakana-kalgolem",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400014
+                                       ]
+                          },
+                 "1160":  {
+                              "name":  "Drana Contaminant",
+                              "slug":  "drana-contaminant",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1179":  {
+                              "name":  "Drana Mutant",
+                              "slug":  "drana-mutant",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400001
+                                       ]
+                          },
+                 "1153":  {
+                              "name":  "Drana Mutant Brute",
+                              "slug":  "drana-mutant-brute",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101135,
+                                           2110503,
+                                           2400834
+                                       ]
+                          },
+                 "1174":  {
+                              "name":  "Drana Predator",
+                              "slug":  "drana-predator",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2110505,
+                                           2400010
+                                       ]
+                          },
+                 "1128":  {
+                              "name":  "Drana Slime",
+                              "slug":  "drana-slime",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400015
+                                       ]
+                          },
+                 "1129":  {
+                              "name":  "Drana Swarm",
+                              "slug":  "drana-swarm",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2110501
+                                       ]
+                          },
+                 "1173":  {
+                              "name":  "Duduka Trebuchet Worker",
+                              "slug":  "duduka-trebuchet-worker",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400613
+                                       ]
+                          },
+                 "1172":  {
+                              "name":  "Duduka Worker",
+                              "slug":  "duduka-worker",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400612
+                                       ]
+                          },
+                 "1206":  {
+                              "name":  "Elite Guardite",
+                              "slug":  "elite-guardite",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100718
+                                       ]
+                          },
+                 "1182":  {
+                              "name":  "Elite Soulless Corpse Gnat",
+                              "slug":  "elite-soulless-corpse-gnat",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1218":  {
+                              "name":  "Faded Drana",
+                              "slug":  "faded-drana",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400478
+                                       ]
+                          },
+                 "1161":  {
+                              "name":  "Faded Floater",
+                              "slug":  "faded-floater",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400479
+                                       ]
+                          },
+                 "1180":  {
+                              "name":  "Faded Mutant",
+                              "slug":  "faded-mutant",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400477,
+                                           2600430,
+                                           2600505,
+                                           2600534,
+                                           2600540,
+                                           2600554,
+                                           2600560
+                                       ]
+                          },
+                 "1154":  {
+                              "name":  "Faded Mutant Brute",
+                              "slug":  "faded-mutant-brute",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400476,
+                                           2600432,
+                                           2600541,
+                                           2600561
+                                       ]
+                          },
+                 "1175":  {
+                              "name":  "Faded Predator",
+                              "slug":  "faded-predator",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400480
+                                       ]
+                          },
+                 "1167":  {
+                              "name":  "Flame Stone Guardian Statue",
+                              "slug":  "flame-stone-guardian-statue",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1140":  {
+                              "name":  "Forest Monster",
+                              "slug":  "forest-monster",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100350,
+                                           2400225
+                                       ]
+                          },
+                 "1146":  {
+                              "name":  "Gatekeeper Pinopi",
+                              "slug":  "gatekeeper-pinopi",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1194":  {
+                              "name":  "Guardite",
+                              "slug":  "guardite",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100712
+                                       ]
+                          },
+                 "1077":  {
+                              "name":  "Harcon",
+                              "slug":  "harcon",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2300104,
+                                           2310104,
+                                           2320104
+                                       ]
+                          },
+                 "1084":  {
+                              "name":  "Kalgolem",
+                              "slug":  "kalgolem",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100002,
+                                           2100700,
+                                           2400328,
+                                           2600070,
+                                           2600470
+                                       ]
+                          },
+                 "1028":  {
+                              "name":  "Krao Mutant",
+                              "slug":  "krao-mutant",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1107":  {
+                              "name":  "Krao Seal Guardian",
+                              "slug":  "krao-seal-guardian",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1068":  {
+                              "name":  "Krao Test Subject",
+                              "slug":  "krao-test-subject",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1141":  {
+                              "name":  "Marsh Targon",
+                              "slug":  "marsh-targon",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100021,
+                                           2600426,
+                                           2600502,
+                                           2600532,
+                                           2600552
+                                       ]
+                          },
+                 "1176":  {
+                              "name":  "Mudthorn",
+                              "slug":  "mudthorn",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400481,
+                                           2400707
+                                       ]
+                          },
+                 "1064":  {
+                              "name":  "Oculazen",
+                              "slug":  "oculazen",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100854,
+                                           2400711
+                                       ]
+                          },
+                 "1159":  {
+                              "name":  "Parasite Swarm",
+                              "slug":  "parasite-swarm",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400473
+                                       ]
+                          },
+                 "1087":  {
+                              "name":  "Pino",
+                              "slug":  "pino",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100953,
+                                           2100954
+                                       ]
+                          },
+                 "1088":  {
+                              "name":  "Pino Worker",
+                              "slug":  "pino-worker",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100955
+                                       ]
+                          },
+                 "1186":  {
+                              "name":  "Poison Blood",
+                              "slug":  "poison-blood",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400311,
+                                           2400743
+                                       ]
+                          },
+                 "1192":  {
+                              "name":  "Silver Blade Rotan",
+                              "slug":  "silver-blade-rotan",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2600003,
+                                           2600013,
+                                           2600403,
+                                           2600413,
+                                           2600481,
+                                           2600491
+                                       ]
+                          },
+                 "1061":  {
+                              "name":  "Slime",
+                              "slug":  "slime",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400320
+                                       ]
+                          },
+                 "1183":  {
+                              "name":  "Soulless Corpse Gnat",
+                              "slug":  "soulless-corpse-gnat",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400413
+                                       ]
+                          },
+                 "1139":  {
+                              "name":  "Swamp Monster",
+                              "slug":  "swamp-monster",
+                              "genus":  "Varian",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1013":  {
+                              "name":  "Swarm",
+                              "slug":  "swarm",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400080,
+                                           2400456,
+                                           2600001,
+                                           2600011,
+                                           2600021,
+                                           2600401,
+                                           2600411,
+                                           2600421
+                                       ]
+                          },
+                 "1063":  {
+                              "name":  "Vigilant Oculazen",
+                              "slug":  "vigilant-oculazen",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400364
+                                       ]
+                          },
+                 "1197":  {
+                              "name":  "Watcher Guardite",
+                              "slug":  "watcher-guardite",
+                              "genus":  "Varian",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100716
+                                       ]
+                          },
+                 "1193":  {
+                              "name":  "Addicted Shulak Cart Worker",
+                              "slug":  "addicted-shulak-cart-worker",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400455
+                                       ]
+                          },
+                 "1040":  {
+                              "name":  "Aullaeu Shaman",
+                              "slug":  "aullaeu-shaman",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100950
+                                       ]
+                          },
+                 "1044":  {
+                              "name":  "Aultross\u0027s Doppelganger",
+                              "slug":  "aultrosss-doppelganger",
+                              "genus":  "Cogni",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1065":  {
+                              "name":  "Biruta",
+                              "slug":  "biruta",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100183,
+                                           2400920
+                                       ]
+                          },
+                 "1105":  {
+                              "name":  "Biruta Herbalist",
+                              "slug":  "biruta-herbalist",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400919
+                                       ]
+                          },
+                 "1202":  {
+                              "name":  "Decomposed Lupyllini",
+                              "slug":  "decomposed-lupyllini",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100747,
+                                           2400004,
+                                           2400378,
+                                           2400391,
+                                           2400911
+                                       ]
+                          },
+                 "1195":  {
+                              "name":  "Dracuni Herbalist",
+                              "slug":  "dracuni-herbalist",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100867,
+                                           2400746
+                                       ]
+                          },
+                 "1184":  {
+                              "name":  "Drakan Watcher",
+                              "slug":  "drakan-watcher",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100872,
+                                           2400384,
+                                           2400591
+                                       ]
+                          },
+                 "1147":  {
+                              "name":  "Dratona",
+                              "slug":  "dratona",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100901,
+                                           2400116,
+                                           2400161,
+                                           2400380
+                                       ]
+                          },
+                 "1185":  {
+                              "name":  "Dratona Tinkerer",
+                              "slug":  "dratona-tinkerer",
+                              "genus":  "Cogni",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1196":  {
+                              "name":  "Elite Dratona",
+                              "slug":  "elite-dratona",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2406035
+                                       ]
+                          },
+                 "1156":  {
+                              "name":  "Elite Klaw",
+                              "slug":  "elite-klaw",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100079
+                                       ]
+                          },
+                 "1033":  {
+                              "name":  "Elite Manduri Fighter",
+                              "slug":  "elite-manduri-fighter",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100557,
+                                           2100569,
+                                           2400605
+                                       ]
+                          },
+                 "1108":  {
+                              "name":  "Enhanced Krall Combatant",
+                              "slug":  "enhanced-krall-combatant",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100097
+                                       ]
+                          },
+                 "1109":  {
+                              "name":  "Enhanced Krall Sentry",
+                              "slug":  "enhanced-krall-sentry",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100072
+                                       ]
+                          },
+                 "1191":  {
+                              "name":  "Furious Feruk",
+                              "slug":  "furious-feruk",
+                              "genus":  "Cogni",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1162":  {
+                              "name":  "Kerubar",
+                              "slug":  "kerubar",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101075,
+                                           2101079,
+                                           2400801
+                                       ]
+                          },
+                 "1170":  {
+                              "name":  "Kerubian",
+                              "slug":  "kerubian",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101076,
+                                           2101080,
+                                           2400802
+                                       ]
+                          },
+                 "1171":  {
+                              "name":  "Kerubiel",
+                              "slug":  "kerubiel",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101077,
+                                           2400803
+                                       ]
+                          },
+                 "1005":  {
+                              "name":  "Klaw",
+                              "slug":  "klaw",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100078,
+                                           2600029,
+                                           2600429,
+                                           2600504,
+                                           2600538,
+                                           2600558
+                                       ]
+                          },
+                 "1029":  {
+                              "name":  "Klaw Scout",
+                              "slug":  "klaw-scout",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400313,
+                                           2600002,
+                                           2600012,
+                                           2600402,
+                                           2600412
+                                       ]
+                          },
+                 "1002":  {
+                              "name":  "Krall Laborer",
+                              "slug":  "krall-laborer",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100075,
+                                           2100480,
+                                           2100914
+                                       ]
+                          },
+                 "1026":  {
+                              "name":  "Krall Warrior",
+                              "slug":  "krall-warrior",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100073,
+                                           2100910,
+                                           2101005
+                                       ]
+                          },
+                 "1017":  {
+                              "name":  "Krall Warshaman",
+                              "slug":  "krall-warshaman",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100074,
+                                           2100855
+                                       ]
+                          },
+                 "1115":  {
+                              "name":  "Kuru Overseer",
+                              "slug":  "kuru-overseer",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101139,
+                                           2400833
+                                       ]
+                          },
+                 "1075":  {
+                              "name":  "Kuru Tinkerer",
+                              "slug":  "kuru-tinkerer",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100181,
+                                           2101134,
+                                           2101137,
+                                           2400832
+                                       ]
+                          },
+                 "1074":  {
+                              "name":  "Kuru Worker",
+                              "slug":  "kuru-worker",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100180,
+                                           2100964,
+                                           2101133,
+                                           2101136,
+                                           2400831
+                                       ]
+                          },
+                 "1010":  {
+                              "name":  "Manduri Fighter",
+                              "slug":  "manduri-fighter",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2110506,
+                                           2400617
+                                       ]
+                          },
+                 "1104":  {
+                              "name":  "Manduri Trebuchet Worker",
+                              "slug":  "manduri-trebuchet-worker",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100816,
+                                           2110507,
+                                           2400615
+                                       ]
+                          },
+                 "1201":  {
+                              "name":  "Modified Lupyllini",
+                              "slug":  "modified-lupyllini",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2100815,
+                                           2101086,
+                                           2400814
+                                       ]
+                          },
+                 "1138":  {
+                              "name":  "Mumu Overseer",
+                              "slug":  "mumu-overseer",
+                              "genus":  "Cogni",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1054":  {
+                              "name":  "Mumu Warrior",
+                              "slug":  "mumu-warrior",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400350,
+                                           2400570,
+                                           2400606
+                                       ]
+                          },
+                 "1137":  {
+                              "name":  "Mumu Worker",
+                              "slug":  "mumu-worker",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400351,
+                                           2400390
+                                       ]
+                          },
+                 "1200":  {
+                              "name":  "Naga Elite Priest",
+                              "slug":  "naga-elite-priest",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2600042,
+                                           2600442,
+                                           2600536,
+                                           2600556
+                                       ]
+                          },
+                 "1030":  {
+                              "name":  "Nagarant Guardian Warrior",
+                              "slug":  "nagarant-guardian-warrior",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2600036,
+                                           2600041,
+                                           2600436,
+                                           2600441,
+                                           2600537,
+                                           2600557
+                                       ]
+                          },
+                 "1093":  {
+                              "name":  "Phantasmal Lakshmi",
+                              "slug":  "phantasmal-lakshmi",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2300401,
+                                           2310401,
+                                           2320401
+                                       ]
+                          },
+                 "1215":  {
+                              "name":  "Predator Saraswati",
+                              "slug":  "predator-saraswati",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2300403,
+                                           2310403,
+                                           2320403
+                                       ]
+                          },
+                 "1103":  {
+                              "name":  "Pretor Veil Administrator",
+                              "slug":  "pretor-veil-administrator",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2101278
+                                       ]
+                          },
+                 "1080":  {
+                              "name":  "Sentinel K\u0027nash",
+                              "slug":  "sentinel-knash",
+                              "genus":  "Cogni",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1078":  {
+                              "name":  "Urugugu Brawler",
+                              "slug":  "urugugu-brawler",
+                              "genus":  "Cogni",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1018":  {
+                              "name":  "Varg Berserker",
+                              "slug":  "varg-berserker",
+                              "genus":  "Cogni",
+                              "unlockSouls":  5,
+                              "npcs":  [
+                                           2400385,
+                                           2400609,
+                                           2600105,
+                                           2600135,
+                                           2600455,
+                                           2600515,
+                                           2600580,
+                                           2600590
+                                       ]
+                          },
+                 "1001":  {
+                              "name":  "Black Dragon",
+                              "slug":  "black-dragon",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1278":  {
+                              "name":  "Chonky Hamster",
+                              "slug":  "chonky-hamster",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1204":  {
+                              "name":  "Pagati",
+                              "slug":  "pagati",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1111":  {
+                              "name":  "Swift Lugi",
+                              "slug":  "swift-lugi",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1299":  {
+                              "name":  "Two",
+                              "slug":  "two",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1112":  {
+                              "name":  "Wandering Merchant Lugi",
+                              "slug":  "wandering-merchant-lugi",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          },
+                 "1240":  {
+                              "name":  "White Bunny",
+                              "slug":  "white-bunny",
+                              "genus":  "Special",
+                              "unlockSouls":  null,
+                              "npcs":  [
+
+                                       ]
+                          }
+             }
+}
