@@ -205,6 +205,8 @@ public sealed class MeterService : IDisposable
 
     private void SaveNames()
     {
+        // Other players' names stay in memory only unless the DPS meter (which shows them) is switched on.
+        if (!Settings.ShowDpsMeter) return;
         var version = Tracker.CacheVersion;
         if (version == _savedNamesVersion) return;
         _savedNamesVersion = version;
@@ -232,7 +234,8 @@ public sealed class MeterService : IDisposable
     /// <summary>Boss fights are always kept; trash only when long enough (or everything, per settings).</summary>
     private bool ShouldSave(EncounterSnapshot s)
     {
-        if (_replaying || DemoRunning || !Settings.SaveHistory || s.CombatMs < Options.MinSavedFightMs) return false;
+        // Fights hold other players' names and damage: nothing is written while the DPS meter is switched off.
+        if (_replaying || DemoRunning || !Settings.ShowDpsMeter || !Settings.SaveHistory || s.CombatMs < Options.MinSavedFightMs) return false;
         var boss = s.Boss is not null;
         return Settings.HistoryMode switch
         {

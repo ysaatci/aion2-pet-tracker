@@ -95,6 +95,7 @@ public partial class App : Application
         };
         AppDomain.CurrentDomain.UnhandledException += (_, ex) => Log.Error("Fatal exception", ex.ExceptionObject as Exception);
 
+        Log.DeleteOld();
         var settings = AppSettings.Load();
         settings.Save(); // persist any migration done while loading
         UiText.Use(settings.Language);
