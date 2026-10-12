@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paste into SignPath: Project → Artifact configurations. The release workflow uploads dist\AION2PetTracker.exe as a
-     GitHub artifact, which GitHub wraps in a zip. SignPath Foundation requires the product name to match the project. -->
+<!-- SignPath artifact configuration for the program (slug in SIGNPATH_EXE_CONFIGURATION_SLUG). The release workflow
+     uploads dist/AION2PetTracker.exe as a GitHub artifact, which GitHub wraps in a zip. -->
 <artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
   <zip-file>
     <pe-file path="AION2PetTracker.exe" product-name="AION2 Pet Tracker">

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SignPath artifact configuration for the installer (slug in SIGNPATH_INSTALLER_CONFIGURATION_SLUG). The release
+     workflow uploads dist/AION2PetTracker-Setup-v<version>.exe as a GitHub artifact, which GitHub wraps in a zip. -->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+    <pe-file path="AION2PetTracker-Setup-v*.exe">
+      <authenticode-sign />
+    </pe-file>
+  </zip-file>
+</artifact-configuration>

@@ -26,7 +26,7 @@ public sealed class Updater : IDisposable
 {
     private static readonly TimeSpan FirstCheckDelay = TimeSpan.FromSeconds(20);
     private static readonly TimeSpan CheckInterval = TimeSpan.FromHours(2);
-    private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{27D8681D-DA79-4717-B70E-F2FF09CD0A77}_is1"; // no installer yet: never present, so the tracker always runs as a portable copy
+    private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\{27D8681D-DA79-4717-B70E-F2FF09CD0A77}_is1"; // AppGuid in installer/AION2PetTracker.iss
 
     private readonly AppSettings _settings;
     private readonly UpdateFeed _feed;
