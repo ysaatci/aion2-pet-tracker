@@ -60,6 +60,12 @@ public static class SampleRenderer
                 host = timers;
                 refresh = timers.ReloadNow;
                 break;
+            case "pets" or "pets-login":
+                if (o.Window == "pets") FeedPets(meter);
+                var pets = new PetOverlayWindow(meter) { Width = o.Width ?? 340, Height = o.Height ?? 330 };
+                host = pets;
+                refresh = () => pets.Refresh(force: true);
+                break;
             case "settings":
                 host = new SettingsWindow(meter) { Width = o.Width ?? 640, Height = o.Height ?? 900 };
                 refresh = () => { };
@@ -108,6 +114,29 @@ public static class SampleRenderer
         {
             OverlayWindow.ClockOverride = null;
         }
+    }
+
+    /// <summary>A login snapshot and a mixed field around the character: one or two soul sources of every genus.</summary>
+    private static void FeedPets(MeterService meter)
+    {
+        var catalog = PetTracker.Core.PetCatalog.Load(Path.Combine(MeterService.DataDirectory, "pets.json"));
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var picks = catalog.Pets.Where(p => p.SourceNpcs.Count > 0).GroupBy(p => p.Genus)
+            .SelectMany(g => g.OrderBy(p => p.Id).Take(g.Key == PetTracker.Core.Genus.Cogni ? 1 : 2)).ToList();
+        if (catalog.Pet(1018) is { } varg) picks.Insert(0, varg);
+        var levels = new Dictionary<int, int>();
+        var souls = new Dictionary<int, int>();
+        for (var i = 0; i < picks.Count; i++)
+        {
+            var (level, count) = (i % 4) switch { 0 => (2, 15), 1 => (1, 19), 2 => (0, 3), _ => (3, 0) };
+            if (level > 0) levels[picks[i].Id] = level;
+            souls[picks[i].Id] = count;
+        }
+        meter.Pets.Process(new PetCollectionEvent(now - 60_000, 1046, levels, souls));
+        uint actor = 100;
+        foreach (var p in picks)
+            for (var n = 0; n < 1 + (int)(actor % 3); n++)
+                meter.Pets.Process(new NpcSeenEvent(now - 5_000, actor++, p.SourceNpcs[0]));
     }
 
     private static MeterService CreateMeter(string language, int rowSize = 100)

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AionMeter.Core\AionMeter.Core.csproj" />
+    <ProjectReference Include="..\PetTracker.Core\PetTracker.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

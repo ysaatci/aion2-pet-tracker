@@ -83,6 +83,22 @@ public sealed class UiText
     public string UnknownSummonsTip { get; init; } =
         "Pets, spirits and skill effects (Bittercold Wind, Fire Wall …) whose caster could not be identified. Not a player: not counted in places or the player total.";
 
+    // ---------------------------------------------------------------- pets (English only so far)
+    public string PetsTitle { get; init; } = "Nearby pets";
+    public string HkPets { get; init; } = "Nearby pets";
+    public string TrayPets { get; init; } = "Nearby pets";
+    public string PetsNoneNearby { get; init; } = "No pet soul mobs nearby";
+    public string PetsNeedLogin { get; init; } = "Log in again to load your pets";
+    public string PetsMax { get; init; } = "MAX";
+    public string PetsNew { get; init; } = "NEW";
+    public string PetsMore { get; init; } = "+{0} more";
+    public string PetsSize { get; init; } = "Size";
+    public string PetsRows { get; init; } = "Rows";
+    public string PetsLock { get; init; } = "Lock position";
+    public string PetsHide { get; init; } = "Hide ({0})";
+    public string PetsCredit { get; init; } = "Pet data: MetaBot.GG";
+    public string PetsNearbyTip { get; init; } = "{0} nearby: {1}";
+
     // ---------------------------------------------------------------- boss timers
     public string TimersTitle { get; init; } = "Boss timers";
     public string TimersButton { get; init; } = "Boss timers";

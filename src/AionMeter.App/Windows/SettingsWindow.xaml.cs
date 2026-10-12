@@ -48,6 +48,7 @@ public partial class SettingsWindow : Window
         HkReset.Text = s.HotkeyReset;
         HkClick.Text = s.HotkeyClickThrough;
         HkTimers.Text = s.HotkeyTimers;
+        HkPets.Text = s.HotkeyPets;
 
         _devices.Add((null, T.AdapterAuto));
         try
@@ -111,6 +112,7 @@ public partial class SettingsWindow : Window
         s.HotkeyReset = HkReset.Text.Trim();
         s.HotkeyClickThrough = HkClick.Text.Trim();
         s.HotkeyTimers = HkTimers.Text.Trim();
+        s.HotkeyPets = HkPets.Text.Trim();
 
         _meter.ApplySettings();
         if (captureChanged) _meter.RestartCapture();

@@ -28,6 +28,7 @@ public sealed class MeterService : IDisposable
         History = new HistoryStore(Path.Combine(AppSettings.AppDataDir, "fights"));
         Timers = new BossTimers(Path.Combine(AppSettings.AppDataDir, "boss-timers.json"), Data, DataDirectory, persistent: !settings.Transient);
         Updates = new Updater(settings);
+        Pets = new PetService(DataDirectory, persistent: !settings.Transient);
         Tracker.EncounterFinished += OnEncounterFinished;
         // A recording's or the demo's bosses must not move the live respawn timers.
         Tracker.BossNoticed += n =>
@@ -81,6 +82,8 @@ public sealed class MeterService : IDisposable
     public BossTimers Timers { get; }
     /// <summary>New versions on GitHub; checks only run once the app calls <see cref="Updater.Start"/>.</summary>
     public Updater Updates { get; }
+    /// <summary>Pet progress and nearby soul sources; fed by live capture only (never by a replay or the demo).</summary>
+    public PetService Pets { get; }
     public Func<GameData, IEventSource>? CaptureFactory { get; }
 
     public CaptureStatus CaptureStatus =>
@@ -132,6 +135,7 @@ public sealed class MeterService : IDisposable
             {
                 _capture = CaptureFactory(Data);
                 _capture.EventDecoded += Tracker.Process;
+                _capture.EventDecoded += Pets.Process;
                 _capture.Start();
             }
             catch (Exception ex)

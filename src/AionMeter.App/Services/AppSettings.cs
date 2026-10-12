@@ -41,6 +41,17 @@ public sealed class AppSettings
     /// <summary>Bring the overlay up when the meter starts and when it finds the game, so a player sees it is running.</summary>
     public bool ShowOnStart { get; set; } = true;
 
+    // Pet overlay (nearby soul sources)
+    public bool PetOverlayVisible { get; set; }
+    public double PetOverlayLeft { get; set; } = 80;
+    public double PetOverlayTop { get; set; } = 520;
+    public static readonly int[] PetSizes = [80, 100, 125, 150];
+    /// <summary>Pet overlay scale in percent: one of <see cref="PetSizes"/> (right-click the overlay, or Ctrl + wheel).</summary>
+    public int PetOverlaySize { get; set; } = 100;
+    public static readonly int[] PetRowChoices = [3, 5, 8, 12];
+    public int PetOverlayMaxRows { get; set; } = 8;
+    public bool PetOverlayLocked { get; set; }
+
     // Boss respawn timers
     /// <summary>Tray notification this many minutes before a tracked boss respawns; 0 = off.</summary>
     public int BossAlertMinutes { get; set; } = 2;
@@ -86,6 +97,7 @@ public sealed class AppSettings
     public string HotkeyReset { get; set; } = "Ctrl+Shift+R";
     public string HotkeyClickThrough { get; set; } = "Ctrl+Shift+L";
     public string HotkeyTimers { get; set; } = "Ctrl+Shift+T";
+    public string HotkeyPets { get; set; } = "Ctrl+Shift+P";
 
     /// <summary>Bumped when the overlay layout changes enough that saved sizes no longer fit.</summary>
     public int LayoutVersion { get; set; } // 0 when missing from an older settings file; new installs get it in Load()

@@ -46,6 +46,7 @@ public partial class App : Application
     private HistoryWindow? _history;
     private SettingsWindow? _settingsWindow;
     private BossTimersWindow? _timersWindow;
+    private PetOverlayWindow? _pets;
     private readonly Dictionary<object, BreakdownWindow> _breakdowns = new();
     private int _ticks;
 
@@ -118,6 +119,7 @@ public partial class App : Application
 
         _hotkeys = new HotkeyManager(new WindowInteropHelper(_overlay).Handle);
         RegisterHotkeys();
+        if (settings.PetOverlayVisible) SetPetsVisible(true);
 
         _tray = new TrayIcon(new TrayActions(
             ToggleOverlay: () => SetOverlayVisible(!_overlay.IsVisible),
@@ -125,6 +127,7 @@ public partial class App : Application
             Reset: RestartMeter,
             History: ShowHistory,
             BossTimers: ShowBossTimers,
+            Pets: () => SetPetsVisible(_pets is null),
             Settings: ShowSettings,
             Demo: () => _meter.StartDemo(),
             Replay: PickReplay,
@@ -203,6 +206,7 @@ public partial class App : Application
         _meter.Tick();
         UpdateAutoVisibility();
         if (_overlay.IsVisible) _overlay.Refresh();
+        _pets?.Refresh();
         if (++_ticks % 5 == 0)
         {
             _tray?.Update(_overlay.IsVisible, _meter.Settings.ClickThrough, _meter.DemoRunning ? "demo" : _meter.CaptureStatus.Message);
@@ -282,6 +286,25 @@ public partial class App : Application
         _overlay.ApplyHotkeyTips();
         _hotkeys.Register(s.HotkeyClickThrough, ToggleClickThrough);
         _hotkeys.Register(s.HotkeyTimers, ToggleBossTimers);
+        _hotkeys.Register(s.HotkeyPets, () => SetPetsVisible(_pets is null));
+    }
+
+    /// <summary>The nearby pets overlay: hotkey, tray item and its own menu; remembered across starts.</summary>
+    public void SetPetsVisible(bool visible)
+    {
+        if (visible && _pets is null)
+        {
+            _pets = new PetOverlayWindow(_meter);
+            _pets.Hidden += () => SetPetsVisible(false);
+            _pets.Closed += (_, _) => _pets = null;
+            _pets.Show();
+        }
+        else if (!visible)
+        {
+            _pets?.Close();
+        }
+        _meter.Settings.PetOverlayVisible = visible;
+        _meter.Settings.Save();
     }
 
     /// <summary>
