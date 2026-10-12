@@ -124,6 +124,15 @@ public class PetTrackerTests
     }
 
     [Fact]
+    public void Departed_npcs_are_dropped_even_without_snapshots()
+    {
+        var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
+        for (uint i = 0; i < 1_000; i++) tracker.Process(new NpcSeenEvent(1_000 + i, i, UnknownNpc));
+        tracker.Process(new NpcHpEvent(1_000 + NearbyNpcTracker.StaleMs + 60_000, 5_000, 1, 1));
+        Assert.Empty(tracker.Nearby.Npcs);
+    }
+
+    [Fact]
     public void A_new_map_clears_lingering_pets()
     {
         var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));

@@ -23,6 +23,7 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
     private uint _selfId;
     private readonly Dictionary<uint, long> _deaths = new();
     private long _nowMs;
+    private long _lastExpireMs;
     // Pets whose source died or whose soul dropped lately: they stay listed for LingerMs after the last one is gone.
     private readonly Dictionary<int, (long TimeMs, HashSet<int> Codes)> _recent = new();
 
@@ -43,6 +44,13 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
     public void Process(GameEvent e)
     {
         _nowMs = Math.Max(_nowMs, e.TimeMs);
+        // Housekeeping on the event clock too, so the lists stay small while no overlay asks for snapshots.
+        if (_nowMs - _lastExpireMs > 30_000)
+        {
+            _lastExpireMs = _nowMs;
+            _nearby.Expire(_nowMs);
+            foreach (var id in _recent.Where(kv => _nowMs - kv.Value.TimeMs > LingerMs).Select(kv => kv.Key).ToList()) _recent.Remove(id);
+        }
         var changed = true;
         switch (e)
         {
