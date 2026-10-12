@@ -136,6 +136,25 @@ public class PetTrackerTests
     }
 
     [Fact]
+    public void Learned_sources_come_back_after_a_restart()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"pets-learned-{Guid.NewGuid():N}.json");
+        try
+        {
+            var file = new LearnedSources(path);
+            file.Add(UnknownNpc, Varg);
+            file.Add(UnknownNpc, Varg);
+            var catalog = Catalog();
+            file.LoadInto(catalog);
+            Assert.Equal([Varg], catalog.PetsDroppedBy(UnknownNpc));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
     public void Soul_drops_before_any_snapshot_are_ignored()
     {
         var store = new PetProgressStore(Catalog());
