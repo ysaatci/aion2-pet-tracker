@@ -1,9 +1,7 @@
-# Builds the downloads for players:
-#   dist\AION2DpsMeter-Setup-v<version>.exe    - installer: shortcuts, uninstall, Npcap check (needs Inno Setup 7)
-#   dist\AION2DpsMeter-v<version>-win-x64.zip  - the same program without installation (no .NET install needed)
-#   dist\AION2DpsMeter-v<version>-source.zip   - the source code (GPL-3.0: hand it out alongside the program)
-#   dist\AION2DpsMeter-Setup.exe, dist\AION2DpsMeter-win-x64.zip - copies under names that never change, for links
-#   that always give the newest version (releases/latest/download/<name>)
+# Builds the downloads:
+#   dist\AION2PetTracker.exe                     - the program: one self-contained file, game data inside, no .NET needed
+#   dist\AION2PetTracker-v<version>-win-x64.zip  - the same exe with LICENSE and INSTALL.txt (what the in-app updater fetches)
+#   dist\AION2PetTracker-v<version>-source.zip   - the source code (GPL-3.0: hand it out alongside the program)
 # Packet recordings (captures\) and build output never go into any of them.
 param([string]$Version = "")
 
@@ -26,112 +24,44 @@ function New-Zip([string]$folder, [string]$zipPath) {
     }
 }
 
-# Inno Setup 7's compiler: on PATH or in its per-user / per-machine install folder.
-function Find-Iscc {
-    $cmd = Get-Command ISCC.exe -ErrorAction SilentlyContinue
-    if ($cmd) { return $cmd.Source }
-    "$env:LOCALAPPDATA\Programs\Inno Setup 7", "$env:ProgramFiles\Inno Setup 7", "${env:ProgramFiles(x86)}\Inno Setup 7" |
-        ForEach-Object { Join-Path $_ "ISCC.exe" } | Where-Object { Test-Path $_ } | Select-Object -First 1
-}
-
-# Inno Setup writes an installer's version strings in place and pads them with spaces ("AION2 DPS Meter        …").
-# Meters 0.2.0–0.2.3 compare the installer's ProductName exactly before they run it as an update, so the padding is
-# turned into NULs: every string then reads back exactly, and the resource keeps its size and layout. A string that
-# is nothing but padding stays: .NET only trusts a version block whose FileVersion string is not empty.
-function Repair-VersionStrings([string]$Path, [string]$ProductName) {
-    $bytes = [IO.File]::ReadAllBytes($Path)
-    $latin = [Text.Encoding]::GetEncoding(28591) # one char per byte: string offsets are byte offsets
-    $text = $latin.GetString($bytes)
-    $utf16 = { param($s) $latin.GetString([Text.Encoding]::Unicode.GetBytes($s)) }
-    $info = $text.IndexOf((& $utf16 "VS_VERSION_INFO"), [StringComparison]::Ordinal)
-    if ($info -lt 6) { throw "No version info in $Path" }
-    $start = $info - 6 # VS_VERSIONINFO: wLength, wValueLength, wType, key …
-    $end = $start + [BitConverter]::ToUInt16($bytes, $start)
-    foreach ($key in "CompanyName", "FileDescription", "FileVersion", "LegalCopyright", "ProductName", "ProductVersion") {
-        $at = $text.IndexOf((& $utf16 ($key + [char]0)), $start, $end - $start, [StringComparison]::Ordinal)
-        if ($at -lt 6) { continue }
-        $struct = $at - 6 # String: wLength, wValueLength, wType, key, padding to 32 bits, value
-        $structEnd = $struct + [BitConverter]::ToUInt16($bytes, $struct)
-        $value = $start + (($at + 2 * ($key.Length + 1) - $start + 3) -band -4)
-        $stop = $value
-        while ($stop + 1 -lt $structEnd -and ($bytes[$stop] -ne 0 -or $bytes[$stop + 1] -ne 0)) { $stop += 2 }
-        if ($latin.GetString($bytes, $value, $stop - $value).Replace([string][char]0, "").Trim().Length -eq 0) { continue }
-        while ($stop -gt $value -and $bytes[$stop - 2] -eq 0x20 -and $bytes[$stop - 1] -eq 0) {
-            $stop -= 2
-            $bytes[$stop] = 0
-        }
-    }
-    [IO.File]::WriteAllBytes($Path, $bytes)
-    $read = [Diagnostics.FileVersionInfo]::GetVersionInfo($Path).ProductName
-    if ($read -cne $ProductName) { throw "Version info of $Path still reads '$read'" }
-}
-
 $project = Join-Path $root "src\AionMeter.App\AionMeter.App.csproj"
 if (-not $Version) {
     $Version = (Select-Xml -Path $project -XPath "//Version").Node.InnerText | Select-Object -First 1
 }
 $dist = Join-Path $root "dist"
-$name = "AION2DpsMeter-v$Version-win-x64"
+$name = "AION2PetTracker-v$Version-win-x64"
 $stage = Join-Path $dist $name
 New-Item -ItemType Directory -Force $dist | Out-Null
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 
-# Self-contained, no symbols; .NET's own messages only in English and Russian (%3B is MSBuild's escaped ";").
-$publish = @("-c", "Release", "-r", "win-x64", "--self-contained", "true",
-    "-p:DebugType=none", "-p:DebugSymbols=false", "-p:SatelliteResourceLanguages=en%3Bru")
-
-# Portable: one exe + data folder.
-dotnet publish $project @publish -o $stage `
-    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true
+# One self-contained exe; the data folder rides inside and is unpacked next to the runtime on first start.
+# No symbols; .NET's own messages only in English and Russian (%3B is MSBuild's escaped ";").
+dotnet publish $project -c Release -r win-x64 --self-contained true -o $stage `
+    -p:DebugType=none -p:DebugSymbols=false -p:SatelliteResourceLanguages=en%3Bru `
+    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true `
+    -p:EnableCompressionInSingleFile=true
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 
-Copy-Item (Join-Path $root "LICENSE") $stage
-Copy-Item (Join-Path $root "INSTALL.txt") $stage
-if (-not (Test-Path (Join-Path $stage "data\npcs\en.json"))) { throw "data folder missing from the publish output" }
+$exe = Join-Path $stage "AION2PetTracker.exe"
+if (-not (Test-Path $exe)) { throw "publish produced no AION2PetTracker.exe" }
+$extra = Get-ChildItem $stage | Where-Object { $_.Name -ne "AION2PetTracker.exe" }
+if ($extra) { throw "publish left files next to the exe: $($extra.Name -join ', ')" }
 
+Copy-Item (Join-Path $root "LICENSE"), (Join-Path $root "INSTALL.txt") $stage
 $programZip = Join-Path $dist "$name.zip"
 New-Zip $stage $programZip
-$stableZip = Join-Path $dist "AION2DpsMeter-win-x64.zip" # the never-changing name, as for the installer below
-Copy-Item $programZip $stableZip -Force
-$outputs = @($programZip, $stableZip)
+$standalone = Join-Path $dist "AION2PetTracker.exe"
+Copy-Item $exe $standalone -Force
+$outputs = @($standalone, $programZip)
 
-# Installer: a regular (not single-file) publish starts faster once installed, and Inno Setup's LZMA2 packs it
-# smaller than the single-file exe.
-$iscc = Find-Iscc
-if ($iscc) {
-    $setupStage = Join-Path $dist ".setup-stage"
-    if (Test-Path $setupStage) { Remove-Item $setupStage -Recurse -Force }
-    dotnet publish $project @publish -o $setupStage -p:PublishSingleFile=false
-    if ($LASTEXITCODE -ne 0) { throw "dotnet publish (installer) failed" }
-    Copy-Item (Join-Path $root "LICENSE"), (Join-Path $root "INSTALL.txt") $setupStage
-    if (-not (Test-Path (Join-Path $setupStage "data\npcs\en.json"))) { throw "data folder missing from the installer publish" }
-
-    & $iscc /Qp "/DAppVer=$Version" "/DPayloadDir=$setupStage" "/O$dist" (Join-Path $root "installer\AION2DpsMeter.iss")
-    if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
-    Remove-Item $setupStage -Recurse -Force
-    $setupExe = Join-Path $dist "AION2DpsMeter-Setup-v$Version.exe"
-    Repair-VersionStrings $setupExe "AION2 DPS Meter"
-    # Same file under a name that never changes: the download page links to
-    # releases/latest/download/AION2DpsMeter-Setup.exe and always gets the newest version.
-    $stableSetup = Join-Path $dist "AION2DpsMeter-Setup.exe"
-    Copy-Item $setupExe $stableSetup -Force
-    $outputs = @($setupExe, $stableSetup) + $outputs
-}
-else {
-    Write-Warning "Inno Setup 7 not found (https://jrsoftware.org/isdl.php): no installer this time, the zip is ready."
-}
-
-# Source: everything tracked by the project, without recordings, build output or local tooling.
-$sourceStage = Join-Path $dist "AION2DpsMeter-v$Version-source"
+# Source: everything tracked by git (no recordings, build output or local tooling).
+$sourceStage = Join-Path $dist "AION2PetTracker-v$Version-source"
 if (Test-Path $sourceStage) { Remove-Item $sourceStage -Recurse -Force }
-$skip = '\\(bin|obj|captures|dist|site-kit|\.git|\.vs|\.claude|TestResults)(\\|$)'
-Get-ChildItem $root -Recurse -File |
-    Where-Object { $_.FullName.Substring($root.Length) -notmatch $skip -and $_.Extension -notin '.pcap', '.pcapng' } |
-    ForEach-Object {
-        $target = Join-Path $sourceStage $_.FullName.Substring($root.Length + 1)
-        New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
-        Copy-Item $_.FullName $target
-    }
+git -C $root ls-files | ForEach-Object {
+    $target = Join-Path $sourceStage $_
+    New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
+    Copy-Item (Join-Path $root $_) $target
+}
 $sourceZip = "$sourceStage.zip"
 New-Zip $sourceStage $sourceZip
 Remove-Item $sourceStage -Recurse -Force
