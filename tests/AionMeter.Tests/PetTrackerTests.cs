@@ -110,6 +110,20 @@ public class PetTrackerTests
     }
 
     [Fact]
+    public void A_removed_pet_comes_back_when_its_mobs_show_up_again()
+    {
+        var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));
+        tracker.Process(new NpcSeenEvent(1_000, 1, VargNpc));
+        tracker.Process(new NpcSeenEvent(1_000, 2, ArmadonNpc));
+        tracker.Dismiss(Varg);
+        Assert.Equal([Genus.Fera], tracker.Snapshot().NearbyByGenus.Keys);
+        tracker.Process(new DeathEvent(2_000, 1));                  // dying does not bring it back
+        Assert.False(tracker.Snapshot().NearbyByGenus.ContainsKey(Genus.Cogni));
+        tracker.Process(new NpcSeenEvent(3_000, 3, VargNpc));       // a new one spawning does
+        Assert.Equal(1, tracker.Snapshot().NearbyByGenus[Genus.Cogni][0].NearbyCount);
+    }
+
+    [Fact]
     public void A_new_map_clears_lingering_pets()
     {
         var tracker = new PetTrackerService(Catalog(), new PetProgressStore(Catalog()));

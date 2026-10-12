@@ -29,6 +29,9 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
     /// <summary>How long a pet stays listed after its last nearby source died or its soul dropped.</summary>
     public const long LingerMs = 300_000;
 
+    // Removed by hand (×): hidden until one of the pet's mobs spawns into view again.
+    private readonly HashSet<int> _dismissed = new();
+
     public SoulSourceLearner Learner { get; } = new(catalog);
     public PetCatalog Catalog => catalog;
     public PetProgressStore Progress => progress;
@@ -54,6 +57,8 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
             case NpcSeenEvent n:
                 _nearby.Seen(n.TimeMs, n.ActorId, n.NpcCode, n.X, n.Y, n.Z);
                 changed = catalog.PetsDroppedBy(n.NpcCode).Count > 0;
+                // One of its mobs came into view: a pet removed by hand is back.
+                foreach (var petId in catalog.PetsDroppedBy(n.NpcCode)) _dismissed.Remove(petId);
                 break;
             case DeathEvent d:
                 // A kill arrives twice (kill credit and death packet): only the first one counts.
@@ -95,6 +100,14 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
         if (changed) Changed?.Invoke();
     }
 
+    /// <summary>Takes a pet off the list until one of its mobs comes into view again.</summary>
+    public void Dismiss(int petId)
+    {
+        _dismissed.Add(petId);
+        _recent.Remove(petId);
+        Changed?.Invoke();
+    }
+
     private void Remember(int petId, long timeMs, int? npcCode)
     {
         var codes = _recent.TryGetValue(petId, out var r) ? r.Codes : new HashSet<int>();
@@ -126,6 +139,7 @@ public sealed class PetTrackerService(PetCatalog catalog, PetProgressStore progr
         }
         foreach (var (petId, r) in _recent)
             if (!counts.ContainsKey(petId)) counts[petId] = (0, new HashSet<int>(r.Codes));
+        foreach (var petId in _dismissed) counts.Remove(petId);
         var pets = counts.Select(kv => new NearbyPet(
                 catalog.Pet(kv.Key) ?? new PetInfo(kv.Key, $"Pet {kv.Key}", Genus.Unknown, SoulThresholds.DefaultUnlock, []),
                 progress.Get(kv.Key), kv.Value.Count, kv.Value.Codes.Order().ToList()))
