@@ -6,7 +6,7 @@ namespace AionMeter.Core.Game;
 public sealed record NpcDef(int Code, string Name, bool IsBoss, bool IsDummy);
 
 /// <summary>
-/// Static lookup tables loaded from the <c>data</c> folder (see <c>data/NOTICE.md</c> for formats and sources).
+/// Static lookup tables loaded from the <c>data</c> folder (sources: the README's credits; formats: the loaders below).
 /// Names are per language (<c>skills/ru.json</c> …) with English as the fallback. Every file is optional — without
 /// them the meter still works and shows raw ids ("Skill 11020000", "NPC 2000002").
 /// </summary>

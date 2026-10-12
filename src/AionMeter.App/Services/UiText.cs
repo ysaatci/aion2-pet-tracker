@@ -372,7 +372,7 @@ public sealed class UiText
     public string SecData { get; init; } = "DATA";
     public string DownloadIcons { get; init; } = "Download skill icons and boss portraits";
     public string IconsHint { get; init; } = "Skill icons: official AION 2 CDN (assets.playnccdn.com). Boss portraits: MetaBot.GG (metabot.gg). Each picture is fetched once, then cached.";
-    public string DataInfo { get; init; } = "Skill names: {0:#,0} · NPCs: {1:#,0} ({2:#,0} bosses) · DoT list: {3:#,0} · Maps: {4:#,0}\nTables come from GPL-3.0 projects (see data/NOTICE.md). skills.json / npcs.json in the data folder override them.";
+    public string DataInfo { get; init; } = "Skill names: {0:#,0} · NPCs: {1:#,0} ({2:#,0} bosses) · DoT list: {3:#,0} · Maps: {4:#,0}\nTables come from GPL-3.0 projects (credits in the README). skills.json / npcs.json in the data folder override them.";
     public string OpenDataFolder { get; init; } = "Open data folder";
     public string OpenAppFolder { get; init; } = "Open app folder";
     public string Logs { get; init; } = "Logs";
@@ -706,7 +706,7 @@ public sealed class UiText
         SecData = "ДАННЫЕ",
         DownloadIcons = "Скачивать иконки умений и портреты боссов",
         IconsHint = "Иконки умений — официальный CDN AION 2 (assets.playnccdn.com), портреты боссов — MetaBot.GG (metabot.gg). Каждая картинка скачивается один раз, затем берётся из кэша.",
-        DataInfo = "Умений: {0:#,0} · NPC: {1:#,0} (боссов: {2:#,0}) · DoT: {3:#,0} · Карт: {4:#,0}\nТаблицы взяты из проектов под GPL-3.0 (см. data/NOTICE.md). skills.json / npcs.json в папке data их переопределяют.",
+        DataInfo = "Умений: {0:#,0} · NPC: {1:#,0} (боссов: {2:#,0}) · DoT: {3:#,0} · Карт: {4:#,0}\nТаблицы взяты из проектов под GPL-3.0 (список в README). skills.json / npcs.json в папке data их переопределяют.",
         OpenDataFolder = "Папка данных",
         OpenAppFolder = "Папка программы",
         Logs = "Логи",

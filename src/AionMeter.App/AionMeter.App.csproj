@@ -37,7 +37,7 @@
     <!-- Development runs read data\ next to the program; the published single exe carries it embedded (DataFiles). -->
     <None Include="..\..\data\**\*" Link="data\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"
           CopyToPublishDirectory="Never" />
-    <EmbeddedResource Include="..\..\data\**\*" Exclude="..\..\data\NOTICE.md" LogicalName="data/%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\..\data\**\*" LogicalName="data/%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
