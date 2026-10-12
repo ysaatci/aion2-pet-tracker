@@ -57,6 +57,10 @@ public sealed class AppSettings
     public static readonly int[] PetRowChoices = [3, 5, 8, 12];
     public int PetOverlayMaxRows { get; set; } = 8;
     public bool PetOverlayLocked { get; set; }
+    /// <summary>The pet the player chose to farm; null = the overlay follows the latest soul drop.</summary>
+    public int? PetFocusPinned { get; set; }
+    /// <summary>The "more pets nearby" list is open.</summary>
+    public bool PetDiscoveryOpen { get; set; }
     /// <summary>Background opacity behind the pet list: 0 (none) to 0.8.</summary>
     public double PetOverlayOpacity { get; set; } = 0.55;
 

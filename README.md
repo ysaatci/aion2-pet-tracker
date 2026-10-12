@@ -5,8 +5,10 @@ far each of those pets is from its next level.
 
 ![The nearby pets overlay](docs/images/pet-overlay.png)
 
-- **Nearby only**: the monsters in view that drop a pet's soul, with a dot coloured by genus
-  (Cogni, Fera, Natura, Varian, Special).
+- **The pet you're farming, up top**: its genus, a progress bar and the souls left to its next level. It follows
+  your latest soul drop. Click any nearby pet to pin it instead.
+- **Discover what else is around**: one quiet line ("7 more pets nearby") opens into the other soul sources in view,
+  grouped by genus (Cogni, Fera, Natura, Varian, Special).
 - **Your progress**: level and souls toward the next level (5 to unlock, then 25, then 75), updated as each soul
   drops.
 - A pet whose last mob you killed stays listed (faded) for 5 minutes. **×** removes a pet until its mobs show up

@@ -60,8 +60,9 @@ public static class SampleRenderer
                 host = timers;
                 refresh = timers.ReloadNow;
                 break;
-            case "pets" or "pets-login":
-                if (o.Window == "pets") FeedPets(meter);
+            case "pets" or "pets-folded" or "pets-login":
+                if (o.Window != "pets-login") FeedPets(meter);
+                meter.Settings.PetDiscoveryOpen = o.Window == "pets";
                 var pets = new PetOverlayWindow(meter) { Width = o.Width ?? 236, Height = o.Height ?? 250 };
                 host = pets;
                 refresh = () => pets.Refresh(force: true);
@@ -137,6 +138,8 @@ public static class SampleRenderer
         foreach (var p in picks)
             for (var n = 0; n < 1 + (int)(actor % 3); n++)
                 meter.Pets.Process(new NpcSeenEvent(now - 5_000, actor++, p.SourceNpcs[0]));
+        // Farming the first pick: its soul dropped last, so it is the focus.
+        meter.Pets.Process(new PetSoulGainedEvent(now - 2_000, picks[0].Id, 1));
     }
 
     private static MeterService CreateMeter(string language, int rowSize = 100)

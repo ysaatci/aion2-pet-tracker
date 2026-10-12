@@ -7,17 +7,15 @@
         TextOptions.TextFormattingMode="Display"
         FontFamily="{StaticResource UiFont}" Foreground="{StaticResource Text}" FontSize="11.5">
     <Window.Resources>
-        <!-- The × on a row: invisible until the row is hovered -->
-        <Style x:Key="RemoveButton" TargetType="Button">
-            <Setter Property="Foreground" Value="{StaticResource TextMute}" />
+        <!-- A borderless text button (the pin, the discovery toggle) -->
+        <Style x:Key="Flat" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource TextDim}" />
             <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Visibility" Value="Hidden" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent" Width="14" Height="14">
-                            <TextBlock Text="&#xE711;" FontFamily="{StaticResource IconFont}" FontSize="8"
-                                       Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Border Background="Transparent" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -27,6 +25,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <!-- The × on a nearby row: invisible until the row is hovered -->
+        <Style x:Key="RemoveButton" TargetType="Button" BasedOn="{StaticResource Flat}">
+            <Setter Property="Visibility" Value="Hidden" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid, AncestorLevel=2}}" Value="True">
                     <Setter Property="Visibility" Value="Visible" />
@@ -35,7 +38,7 @@
         </Style>
     </Window.Resources>
 
-    <Border x:Name="Panel" CornerRadius="6" Padding="9,6,6,6" Width="232" BorderThickness="1" BorderBrush="#14FFFFFF">
+    <Border x:Name="Panel" CornerRadius="6" Padding="10,7,7,7" Width="236" BorderThickness="1">
         <Border.Background>
             <SolidColorBrush x:Name="PanelFill" Color="{StaticResource Bg0Color}" Opacity="0.55" />
         </Border.Background>
@@ -43,43 +46,80 @@
             <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1" />
         </Border.LayoutTransform>
         <StackPanel>
-            <ItemsControl x:Name="List">
+            <!-- The pet being farmed -->
+            <StackPanel x:Name="FocusCard" Background="Transparent">
+                <Grid>
+                    <TextBlock x:Name="FocusGenus" FontSize="9.5" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Button x:Name="PinButton" Style="{StaticResource Flat}" HorizontalAlignment="Right" Padding="4,0,2,0"
+                            Click="Pin_Click">
+                        <TextBlock x:Name="PinIcon" FontFamily="{StaticResource IconFont}" FontSize="10" />
+                    </Button>
+                </Grid>
+                <Grid Margin="0,1,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="FocusName" FontSize="13.5" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="FocusNearby" Grid.Column="1" FontSize="10" Foreground="{StaticResource TextDim}" Opacity="0.75"
+                               VerticalAlignment="Bottom" Margin="8,0,3,1" />
+                </Grid>
+                <Grid Margin="0,5,3,0" Height="5">
+                    <Border Background="#1AFFFFFF" CornerRadius="2.5" />
+                    <Border x:Name="FocusFill" CornerRadius="2.5" HorizontalAlignment="Left" />
+                </Grid>
+                <Grid Margin="0,3,3,0">
+                    <TextBlock x:Name="FocusLevel" FontSize="10.5" Foreground="{StaticResource TextDim}" />
+                    <TextBlock x:Name="FocusSouls" FontSize="10.5" FontWeight="SemiBold" FontFamily="{StaticResource NumberFont}"
+                               HorizontalAlignment="Right" />
+                </Grid>
+            </StackPanel>
+            <TextBlock x:Name="FocusHint" FontSize="10.5" Foreground="{StaticResource TextDim}" TextWrapping="Wrap" />
+
+            <!-- Other pets around: one quiet line, the list grouped by genus when opened -->
+            <Border x:Name="Divider" Height="1" Background="#14FFFFFF" Margin="0,7,3,4" />
+            <Button x:Name="DiscoveryToggle" Style="{StaticResource Flat}" HorizontalAlignment="Left" Click="Discovery_Click">
+                <TextBlock x:Name="DiscoveryText" FontSize="10.5" />
+            </Button>
+            <ItemsControl x:Name="List" Margin="0,2,0,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <!-- Row: genus dot · name · count · souls, a hairline progress bar under it -->
-                        <Grid Background="Transparent" Margin="0,2,0,3" ToolTip="{Binding Tip}" Opacity="{Binding RowOpacity}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="11" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="16" />
-                                </Grid.ColumnDefinitions>
-                                <Ellipse Width="6" Height="6" Fill="{Binding Accent}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                                <TextBlock Grid.Column="2" Text="{Binding Count}" Foreground="{StaticResource TextDim}" Opacity="0.7" FontSize="10"
-                                           Margin="6,0,0,0" VerticalAlignment="Center" />
-                                <TextBlock Grid.Column="3" Text="{Binding Souls}" Foreground="{StaticResource TextDim}"
-                                           FontFamily="{StaticResource NumberFont}" FontSize="10.5" Margin="8,0,0,0" VerticalAlignment="Center" />
-                                <Button Grid.Column="4" Style="{StaticResource RemoveButton}" HorizontalAlignment="Right"
-                                        Click="Remove_Click" ToolTip="{Binding RemoveTip}" />
-                            </Grid>
-                            <Grid Grid.Row="1" Height="2" Margin="11,3,16,0" Visibility="{Binding BarVisibility}">
-                                <Border Background="#1AFFFFFF" CornerRadius="1" />
-                                <Border Background="{Binding Accent}" CornerRadius="1" HorizontalAlignment="Left" Width="{Binding FillWidth}" />
+                        <Grid Background="Transparent" ToolTip="{Binding Tip}" Opacity="{Binding RowOpacity}" Cursor="{Binding RowCursor}"
+                              MouseLeftButtonUp="Row_Click">
+                            <TextBlock Text="{Binding Header}" Visibility="{Binding HeaderVisibility}" Foreground="{Binding Accent}"
+                                       FontSize="9.5" FontWeight="Bold" Margin="0,5,0,1" />
+                            <Grid Visibility="{Binding RowVisibility}" Margin="0,1,0,2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="16" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Count}" Foreground="{StaticResource TextDim}" Opacity="0.7"
+                                               FontSize="10" Margin="6,0,0,0" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Souls}" Foreground="{StaticResource TextDim}"
+                                               FontFamily="{StaticResource NumberFont}" FontSize="10.5" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    <Button Grid.Column="3" Style="{StaticResource RemoveButton}" HorizontalAlignment="Right"
+                                            Click="Remove_Click" ToolTip="{Binding RemoveTip}">
+                                        <TextBlock Text="&#xE711;" FontFamily="{StaticResource IconFont}" FontSize="8" Width="14" TextAlignment="Center" />
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Row="1" Height="2" Margin="0,3,16,0" Visibility="{Binding BarVisibility}">
+                                    <Border Background="#1AFFFFFF" CornerRadius="1" />
+                                    <Border Background="{Binding Accent}" CornerRadius="1" HorizontalAlignment="Left" Width="{Binding FillWidth}" />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <TextBlock x:Name="EmptyText" Foreground="{StaticResource TextMute}" FontSize="10.5" Margin="1,1,1,1" />
-            <TextBlock x:Name="MoreText" Foreground="{StaticResource TextMute}" FontSize="10"
-                       Margin="11,1,0,0" />
+            <TextBlock x:Name="MoreText" Foreground="{StaticResource TextMute}" FontSize="10" Margin="0,1,0,0" />
         </StackPanel>
     </Border>
 </Window>

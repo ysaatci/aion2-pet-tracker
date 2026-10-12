@@ -48,8 +48,9 @@ public sealed class PetService
         lock (_gate) _tracker.Dismiss(petId);
     }
 
-    public PetOverlaySnapshot Snapshot()
+    /// <param name="pinnedPetId">The pet the player pinned; null = the focus follows the latest soul drop.</param>
+    public PetOverlaySnapshot Snapshot(int? pinnedPetId = null)
     {
-        lock (_gate) return _tracker.Snapshot(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+        lock (_gate) return _tracker.Snapshot(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), pinnedPetId);
     }
 }
