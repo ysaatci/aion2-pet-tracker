@@ -51,8 +51,13 @@ NCSOFT, so use it at your own risk.
 
 **Why does Windows warn me?**
 Small free tools like this one (and most game meters) aren't signed with a paid certificate, so Windows SmartScreen
-asks once before running the download. A few PCs have *Smart App Control* turned on, which blocks every unsigned
-program. The tracker can't run there until releases are code-signed, which is in progress.
+asks once before running the download. A few PCs, mostly brand-new ones, have *Smart App Control* turned on, which
+blocks every unsigned program, this tracker included.
+
+**How do updates work?**
+The installed tracker checks GitHub for a new version every couple of hours, downloads it in the background, and
+installs it when you're not playing (or after 10 minutes without a fight). It then restarts by itself. The tray
+notice lets you install right away. The portable exe only tells you a new version is out.
 
 **My pets show "Log in again to load your pets".**
 The tracker hasn't seen a login yet. Go to character select and log back in with the tracker running.
@@ -84,18 +89,6 @@ There are no accounts, telemetry, analytics or ads. Everything stays on your PC:
     and boss portraits from MetaBot.GG (`metabot.gg`). Settings → "Download skill icons and boss portraits" turns
     these off.
 
-## Code signing policy
-
-Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by
-[SignPath Foundation](https://signpath.org) (application in progress; releases are unsigned until then). Releases
-are built by GitHub Actions from this repository ([release workflow](.github/workflows/release.yml)), and every
-signing request is approved by hand.
-
-| Role | Members |
-|---|---|
-| Committers and reviewers | [ysaatci](https://github.com/ysaatci) |
-| Approvers | [ysaatci](https://github.com/ysaatci) |
-
 ## Credits and licence
 
 - Built on [AION2 DPS Meter](https://github.com/cyberbadger6969/aion2-dps-meter) by cyberbadger6969, whose capture and
@@ -126,5 +119,5 @@ powershell -File build-release.ps1          # dist/: installer, portable exe, zi
 | `AionMeter.Cli` | Developer tool: record and replay captures (`pets <file.pcap>` replays one through the tracker) |
 
 To release, bump `<Version>` in `src/AionMeter.App/AionMeter.App.csproj` and push a `vX.Y.Z` tag. The release
-workflow builds, signs when configured, and drafts the release. The pet catalog is rebuilt with
+workflow builds everything and drafts the release; publishing it rolls the update out to installed copies. The pet catalog is rebuilt with
 `tools/build-pet-catalog.ps1`.

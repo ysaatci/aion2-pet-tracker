@@ -3,8 +3,7 @@
 #   AION2PetTracker.exe                        - the program as one portable file, game data inside, no .NET needed
 #   AION2PetTracker-v<version>-win-x64.zip     - the portable exe with its licence
 #   AION2PetTracker-v<version>-source.zip      - the source code (GPL-3.0: handed out alongside the program)
-# -Stage runs one step, so CI can sign the exe before it goes into the installer and sign the installer after:
-#   exe | installer | archives | all (default)
+# -Stage runs one step: exe | installer | archives | all (default)
 param([string]$Version = "", [ValidateSet("exe", "installer", "archives", "all")] [string]$Stage = "all")
 
 $ErrorActionPreference = "Stop"
@@ -50,8 +49,8 @@ $outputs = @()
 if ($Stage -in "exe", "all") {
     $publishDir = Join-Path $dist ".publish"
     if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
-    # One self-contained exe. All managed code is loaded from inside it (covered by its signature); only Microsoft's
-    # signed native WPF libraries are unpacked. The game data is embedded as resources (see DataFiles.cs).
+    # One self-contained exe. All managed code is loaded from inside it, never unpacked to disk; only Microsoft's
+    # signed native WPF libraries are. The game data is embedded as resources (see DataFiles.cs).
     # No symbols; .NET's own messages only in English and Russian (%3B is MSBuild's escaped ";").
     dotnet publish $project -c Release -r win-x64 --self-contained true -o $publishDir `
         -p:DebugType=none -p:DebugSymbols=false -p:SatelliteResourceLanguages=en%3Bru `
