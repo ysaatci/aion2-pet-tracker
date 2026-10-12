@@ -137,5 +137,15 @@ public sealed record BossTimeLimitEvent(long TimeMs, uint ActorId, long EndMs) :
 /// <summary>Server-side combat state toggle for an NPC (boss engaged / disengaged). KR only so far.</summary>
 public sealed record BattleStateEvent(long TimeMs, uint ActorId, bool InCombat) : GameEvent(TimeMs);
 
+/// <summary>
+/// The local character's pet collection (<c>00 90</c>), sent once at login. <paramref name="Levels"/>: owned pets → level
+/// 1..3. <paramref name="Souls"/>: pet → souls toward its next level (pets not owned yet included; resets on level up).
+/// </summary>
+public sealed record PetCollectionEvent(long TimeMs, int ActivePetId, IReadOnlyDictionary<int, int> Levels,
+    IReadOnlyDictionary<int, int> Souls) : GameEvent(TimeMs);
+
+/// <summary>A pet soul dropped for the local character (<c>0d 90</c>), shortly after the kill that gave it.</summary>
+public sealed record PetSoulGainedEvent(long TimeMs, int PetId, int Souls) : GameEvent(TimeMs);
+
 /// <summary>A map load. <paramref name="IsTeleport"/> is true for a re-load inside the same map.</summary>
 public sealed record ZoneChangedEvent(long TimeMs, int MapId, string ZoneName, bool IsDungeon, bool IsTeleport = false) : GameEvent(TimeMs);

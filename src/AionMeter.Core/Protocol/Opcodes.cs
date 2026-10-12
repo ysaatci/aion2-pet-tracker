@@ -27,6 +27,8 @@ public static class Opcodes
     public const ushort HpMp = 0x1B92;
     public const ushort PartyRoster = 0x0297;
     public const ushort FieldBossList = 0x0191;  // a map's field bosses: alive since / back at (in-game map list)
+    public const ushort PetCollection = 0x0090;  // login: owned pets + levels, souls per pet
+    public const ushort PetSoul = 0x0D90;        // a pet soul dropped: pet id, souls gained
 
     public static string Name(ushort op) => op switch
     {
@@ -46,6 +48,8 @@ public static class Opcodes
         HpMp => "HpMp",
         PartyRoster => "PartyRoster",
         FieldBossList => "FieldBosses",
+        PetCollection => "PetCollection",
+        PetSoul => "PetSoul",
         _ => $"{op >> 8:x2} {op & 0xFF:x2}",
     };
 }

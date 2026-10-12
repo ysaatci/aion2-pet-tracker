@@ -97,6 +97,12 @@ public sealed class PacketParser
             case Opcodes.BattleToggle:
                 ParseBattleToggle(body);
                 break;
+            case Opcodes.PetCollection:
+                ParsePetCollection(body);
+                break;
+            case Opcodes.PetSoul:
+                ParsePetSoul(body);
+                break;
             default:
                 // Identity records also ride inside other packets: mid-packet, and inside LZ4 bundles embedded in a
                 // larger packet (the self record repeats that way every few minutes after a zone load).
@@ -800,6 +806,49 @@ public sealed class PacketParser
         if (!Wire.TryU8(b, ref o, out var len) || len is < 1 or > 36 || o + len > b.Length) return;
         if (Wire.TryName(b.Slice(o, len), out var name))
             Emit(new PlayerSeenEvent(TimeMs, killer, name, server, GameClass.Unknown));
+    }
+
+    // Pet ids seen so far run 1001..1299; anything far outside means the layout moved.
+    private static bool IsPetId(uint id) => id is >= 1000 and < 10_000;
+
+    /// <summary>
+    /// <c>active pet u32, n varint × {pet u32, pet u32, level u32}, m varint × {pet u32, souls u32}, genus insight…</c>
+    /// (the trailing genus insight blocks are not read).
+    /// </summary>
+    private void ParsePetCollection(ReadOnlySpan<byte> b)
+    {
+        var o = 0;
+        if (!Wire.TryU32(b, ref o, out var active) || (active != 0 && !IsPetId(active))) return;
+        if (!Wire.TryVarint(b, ref o, out var owned) || owned > 1000) return;
+        var levels = new Dictionary<int, int>();
+        for (var i = 0; i < owned; i++)
+        {
+            if (!Wire.TryU32(b, ref o, out var id) || !Wire.TryU32(b, ref o, out var again) || !Wire.TryU32(b, ref o, out var level)) return;
+            if (!IsPetId(id) || again != id || level is < 1 or > 10) return;
+            levels[(int)id] = (int)level;
+        }
+        if (!Wire.TryVarint(b, ref o, out var counted) || counted > 1000) return;
+        var souls = new Dictionary<int, int>();
+        for (var i = 0; i < counted; i++)
+        {
+            if (!Wire.TryU32(b, ref o, out var id) || !Wire.TryU32(b, ref o, out var n)) return;
+            if (!IsPetId(id) || n > 100_000) return;
+            souls[(int)id] = (int)n;
+        }
+        Emit(new PetCollectionEvent(TimeMs, (int)active, levels, souls));
+    }
+
+    /// <summary><c>n u8 × {pet u32, souls gained u32}</c>, n = 1 so far.</summary>
+    private void ParsePetSoul(ReadOnlySpan<byte> b)
+    {
+        var o = 0;
+        if (!Wire.TryU8(b, ref o, out var n) || n == 0 || b.Length != 1 + n * 8) return;
+        for (var i = 0; i < n; i++)
+        {
+            Wire.TryU32(b, ref o, out var id);
+            Wire.TryU32(b, ref o, out var gained);
+            if (IsPetId(id) && gained is > 0 and < 1000) Emit(new PetSoulGainedEvent(TimeMs, (int)id, (int)gained));
+        }
     }
 
     /// <summary><c>mob varint, varint, toggle varint</c> (1 = engaged, 0 = left combat) — seen on Global for every mob.</summary>
