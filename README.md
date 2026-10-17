@@ -3,7 +3,7 @@
 A small overlay for **AION 2 Global (EU / NA)**. It shows the pet you're farming, how many souls it needs for its
 next level, and which other monsters around you drop pet souls.
 
-![The pet overlay](docs/images/pet-overlay.png)
+![The pet overlay in game](docs/images/pet-overlay-ingame.gif)
 
 ## Install
 
